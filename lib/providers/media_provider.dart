@@ -38,3 +38,8 @@ final myMediaProvider = FutureProvider<List<MediaItem>>((ref) async {
   return service.getUserMedia();
 });
 
+final myMediaByFolderProvider = FutureProvider<Map<String, List<MediaItem>>>((ref) async {
+  final service = ref.read(mediaServiceProvider);
+  return service.getUserMediaByFolder();
+});
+
