@@ -1,0 +1,57 @@
+[
+  {
+    "id": "gun_1",
+    "title": "3D Assault Rifle",
+    "description": "Powerful 3D assault rifle",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1920&h=1080&fit=crop",
+    "category": "guns",
+    "isBuiltIn": true
+  },
+  {
+    "id": "gun_2",
+    "title": "3D Sniper Rifle",
+    "description": "Precision 3D sniper rifle",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1920&h=1080&fit=crop",
+    "category": "guns",
+    "isBuiltIn": true
+  },
+  {
+    "id": "gun_3",
+    "title": "3D Handgun",
+    "description": "Compact 3D handgun",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop",
+    "category": "guns",
+    "isBuiltIn": true
+  },
+  {
+    "id": "gun_4",
+    "title": "3D Shotgun",
+    "description": "Powerful 3D shotgun",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1920&h=1080&fit=crop",
+    "category": "guns",
+    "isBuiltIn": true
+  },
+  {
+    "id": "gun_5",
+    "title": "3D Machine Gun",
+    "description": "Heavy 3D machine gun",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1920&h=1080&fit=crop",
+    "category": "guns",
+    "isBuiltIn": true
+  },
+  {
+    "id": "gun_6",
+    "title": "3D Combat Rifle",
+    "description": "Tactical 3D combat rifle",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop",
+    "category": "guns",
+    "isBuiltIn": true
+  }
+]
+

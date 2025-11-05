@@ -1,0 +1,57 @@
+[
+  {
+    "id": "anime_1",
+    "title": "3D Anime Character",
+    "description": "Cool 3D anime character",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1920&h=1080&fit=crop",
+    "category": "anime",
+    "isBuiltIn": true
+  },
+  {
+    "id": "anime_2",
+    "title": "3D Anime Warrior",
+    "description": "Powerful 3D anime warrior",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1920&h=1080&fit=crop",
+    "category": "anime",
+    "isBuiltIn": true
+  },
+  {
+    "id": "anime_3",
+    "title": "3D Anime Scene",
+    "description": "Epic 3D anime scene",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop",
+    "category": "anime",
+    "isBuiltIn": true
+  },
+  {
+    "id": "anime_4",
+    "title": "3D Anime City",
+    "description": "Futuristic 3D anime city",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=1920&h=1080&fit=crop",
+    "category": "anime",
+    "isBuiltIn": true
+  },
+  {
+    "id": "anime_5",
+    "title": "3D Anime Hero",
+    "description": "Brave 3D anime hero",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1920&h=1080&fit=crop",
+    "category": "anime",
+    "isBuiltIn": true
+  },
+  {
+    "id": "anime_6",
+    "title": "3D Anime Landscape",
+    "description": "Beautiful 3D anime landscape",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop",
+    "category": "anime",
+    "isBuiltIn": true
+  }
+]
+

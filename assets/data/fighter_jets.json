@@ -1,0 +1,57 @@
+[
+  {
+    "id": "jet_1",
+    "title": "3D Fighter Jet",
+    "description": "Fast 3D fighter jet",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1920&h=1080&fit=crop",
+    "category": "fighter_jets",
+    "isBuiltIn": true
+  },
+  {
+    "id": "jet_2",
+    "title": "3D Stealth Fighter",
+    "description": "Advanced 3D stealth fighter",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1920&h=1080&fit=crop",
+    "category": "fighter_jets",
+    "isBuiltIn": true
+  },
+  {
+    "id": "jet_3",
+    "title": "3D Jet in Flight",
+    "description": "3D fighter jet in action",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop",
+    "category": "fighter_jets",
+    "isBuiltIn": true
+  },
+  {
+    "id": "jet_4",
+    "title": "3D Combat Jet",
+    "description": "Powerful 3D combat jet",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1920&h=1080&fit=crop",
+    "category": "fighter_jets",
+    "isBuiltIn": true
+  },
+  {
+    "id": "jet_5",
+    "title": "3D Supersonic Jet",
+    "description": "High-speed 3D supersonic jet",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1920&h=1080&fit=crop",
+    "category": "fighter_jets",
+    "isBuiltIn": true
+  },
+  {
+    "id": "jet_6",
+    "title": "3D Jet Formation",
+    "description": "Epic 3D jet formation",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop",
+    "category": "fighter_jets",
+    "isBuiltIn": true
+  }
+]
+

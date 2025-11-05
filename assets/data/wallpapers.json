@@ -2,142 +2,455 @@
   "featured": [
     {
       "id": "featured_1",
-      "title": "Abstract Gradient",
-      "description": "Beautiful abstract gradient wallpaper",
+      "title": "3D Ninja Warrior",
+      "description": "Epic 3D ninja warrior in action",
       "type": "image",
-      "source": "https://images.unsplash.com/photo-1557683316-973673baf926?w=800",
-      "category": "abstract",
+      "source": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1920&h=1080&fit=crop",
+      "category": "ninjas",
       "isBuiltIn": true
     },
     {
       "id": "featured_2",
-      "title": "Nature Landscape",
-      "description": "Serene nature landscape",
+      "title": "3D Couple Romance",
+      "description": "Beautiful 3D couple romantic scene",
       "type": "image",
-      "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-      "category": "nature",
+      "source": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1920&h=1080&fit=crop",
+      "category": "couples",
       "isBuiltIn": true
     },
     {
       "id": "featured_3",
-      "title": "Minimalist Design",
-      "description": "Clean minimalist wallpaper",
+      "title": "3D Sports Car",
+      "description": "Stunning 3D sports car design",
       "type": "image",
-      "source": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
-      "category": "minimalist",
+      "source": "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&h=1080&fit=crop",
+      "category": "cars",
       "isBuiltIn": true
     },
     {
       "id": "featured_4",
-      "title": "Mountain Sunset",
-      "description": "Breathtaking mountain sunset",
+      "title": "3D Army Soldier",
+      "description": "Powerful 3D army soldier portrait",
       "type": "image",
-      "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-      "category": "nature",
+      "source": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1920&h=1080&fit=crop",
+      "category": "army",
       "isBuiltIn": true
     },
     {
       "id": "featured_5",
-      "title": "Geometric Pattern",
-      "description": "Modern geometric design",
+      "title": "3D Lion King",
+      "description": "Majestic 3D lion in nature",
       "type": "image",
-      "source": "https://images.unsplash.com/photo-1557683316-973673baf926?w=800",
+      "source": "https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=1920&h=1080&fit=crop",
+      "category": "animals",
+      "isBuiltIn": true
+    },
+    {
+      "id": "featured_6",
+      "title": "3D Mountain Landscape",
+      "description": "Breathtaking 3D mountain scene",
+      "type": "image",
+      "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop",
+      "category": "nature",
+      "isBuiltIn": true
+    },
+    {
+      "id": "featured_7",
+      "title": "3D Doll Collection",
+      "description": "Beautiful 3D doll artwork",
+      "type": "image",
+      "source": "https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?w=1920&h=1080&fit=crop",
+      "category": "dolls",
+      "isBuiltIn": true
+    },
+    {
+      "id": "featured_8",
+      "title": "3D Abstract Flow",
+      "description": "Dynamic 3D abstract design",
+      "type": "image",
+      "source": "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=1920&h=1080&fit=crop",
       "category": "abstract",
+      "isBuiltIn": true
+    },
+    {
+      "id": "featured_9",
+      "title": "3D Couple Sunset",
+      "description": "Romantic 3D couple at sunset",
+      "type": "image",
+      "source": "https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=1920&h=1080&fit=crop",
+      "category": "couples",
+      "isBuiltIn": true
+    },
+    {
+      "id": "featured_10",
+      "title": "3D Supercar",
+      "description": "Luxury 3D supercar design",
+      "type": "image",
+      "source": "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=1920&h=1080&fit=crop",
+      "category": "cars",
       "isBuiltIn": true
     }
   ],
   "categories": [
     {
+      "id": "animals",
+      "name": "Animals",
+      "itemCount": 6,
+      "description": "Amazing 3D animal wallpapers"
+    },
+    {
+      "id": "cars",
+      "name": "Cars",
+      "itemCount": 6,
+      "description": "Stunning 3D car wallpapers"
+    },
+    {
+      "id": "bikes",
+      "name": "Bikes",
+      "itemCount": 6,
+      "description": "Cool 3D motorcycle wallpapers"
+    },
+    {
       "id": "nature",
       "name": "Nature",
-      "itemCount": 2,
-      "description": "Beautiful nature wallpapers"
+      "itemCount": 6,
+      "description": "Beautiful 3D nature wallpapers"
     },
     {
-      "id": "abstract",
-      "name": "Abstract",
-      "itemCount": 2,
-      "description": "Abstract art wallpapers"
+      "id": "sea",
+      "name": "Sea",
+      "itemCount": 6,
+      "description": "Stunning 3D sea wallpapers"
     },
     {
-      "id": "minimalist",
-      "name": "Minimalist",
-      "itemCount": 1,
-      "description": "Clean minimalist designs"
+      "id": "ocean",
+      "name": "Ocean",
+      "itemCount": 6,
+      "description": "Beautiful 3D ocean wallpapers"
     },
     {
-      "id": "dark",
-      "name": "Dark",
-      "itemCount": 0,
-      "description": "Dark theme wallpapers"
+      "id": "fish",
+      "name": "Fish",
+      "itemCount": 6,
+      "description": "Amazing 3D fish wallpapers"
     },
     {
-      "id": "light",
-      "name": "Light",
-      "itemCount": 0,
-      "description": "Light theme wallpapers"
+      "id": "flowers",
+      "name": "Flowers",
+      "itemCount": 6,
+      "description": "Beautiful 3D flower wallpapers"
     },
     {
-      "id": "gradient",
-      "name": "Gradient",
-      "itemCount": 0,
-      "description": "Gradient wallpapers"
+      "id": "anime",
+      "name": "Anime",
+      "itemCount": 6,
+      "description": "Epic 3D anime wallpapers"
+    },
+    {
+      "id": "ninja",
+      "name": "Ninja",
+      "itemCount": 6,
+      "description": "Powerful 3D ninja wallpapers"
+    },
+    {
+      "id": "ants",
+      "name": "Ants",
+      "itemCount": 6,
+      "description": "Detailed 3D ant wallpapers"
+    },
+    {
+      "id": "buildings",
+      "name": "Buildings",
+      "itemCount": 6,
+      "description": "Stunning 3D building wallpapers"
+    },
+    {
+      "id": "swords",
+      "name": "Swords",
+      "itemCount": 6,
+      "description": "Epic 3D sword wallpapers"
+    },
+    {
+      "id": "guns",
+      "name": "Guns",
+      "itemCount": 6,
+      "description": "Powerful 3D gun wallpapers"
+    },
+    {
+      "id": "fighter_jets",
+      "name": "Fighter Jets",
+      "itemCount": 6,
+      "description": "Fast 3D fighter jet wallpapers"
     }
   ],
   "mediaByCategory": {
+    "ninjas": [
+      {
+        "id": "ninja_1",
+        "title": "3D Ninja Warrior",
+        "description": "Epic 3D ninja warrior in action pose",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1920&h=1080&fit=crop",
+        "category": "ninjas",
+        "isBuiltIn": true
+      },
+      {
+        "id": "ninja_2",
+        "title": "3D Ninja Shadow",
+        "description": "Mysterious 3D ninja in shadows",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1920&h=1080&fit=crop",
+        "category": "ninjas",
+        "isBuiltIn": true
+      },
+      {
+        "id": "ninja_3",
+        "title": "3D Ninja Master",
+        "description": "Powerful 3D ninja master warrior",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop",
+        "category": "ninjas",
+        "isBuiltIn": true
+      }
+    ],
+    "couples": [
+      {
+        "id": "couple_1",
+        "title": "3D Couple Romance",
+        "description": "Beautiful 3D couple romantic scene",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1920&h=1080&fit=crop",
+        "category": "couples",
+        "isBuiltIn": true
+      },
+      {
+        "id": "couple_2",
+        "title": "3D Couple Sunset",
+        "description": "Romantic 3D couple at sunset",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1502680390469-be75c86b636f?w=1920&h=1080&fit=crop",
+        "category": "couples",
+        "isBuiltIn": true
+      },
+      {
+        "id": "couple_3",
+        "title": "3D Couple Love",
+        "description": "Tender 3D couple moment",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1920&h=1080&fit=crop",
+        "category": "couples",
+        "isBuiltIn": true
+      },
+      {
+        "id": "couple_4",
+        "title": "3D Couple Beach",
+        "description": "Romantic 3D couple on beach",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1920&h=1080&fit=crop",
+        "category": "couples",
+        "isBuiltIn": true
+      }
+    ],
+    "cars": [
+      {
+        "id": "car_1",
+        "title": "3D Sports Car",
+        "description": "Stunning 3D sports car design",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1544636331-e26879cd4d9b?w=1920&h=1080&fit=crop",
+        "category": "cars",
+        "isBuiltIn": true
+      },
+      {
+        "id": "car_2",
+        "title": "3D Supercar",
+        "description": "Luxury 3D supercar design",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1503736334956-4c8f8e92946d?w=1920&h=1080&fit=crop",
+        "category": "cars",
+        "isBuiltIn": true
+      },
+      {
+        "id": "car_3",
+        "title": "3D Racing Car",
+        "description": "Fast 3D racing car in action",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1503376780353-7e6692767b70?w=1920&h=1080&fit=crop",
+        "category": "cars",
+        "isBuiltIn": true
+      },
+      {
+        "id": "car_4",
+        "title": "3D Classic Car",
+        "description": "Vintage 3D classic car design",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1502877338535-766e1452684a?w=1920&h=1080&fit=crop",
+        "category": "cars",
+        "isBuiltIn": true
+      }
+    ],
+    "army": [
+      {
+        "id": "army_1",
+        "title": "3D Army Soldier",
+        "description": "Powerful 3D army soldier portrait",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1920&h=1080&fit=crop",
+        "category": "army",
+        "isBuiltIn": true
+      },
+      {
+        "id": "army_2",
+        "title": "3D Military Helmet",
+        "description": "Epic 3D military helmet design",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1579546929518-9e396f3cc809?w=1920&h=1080&fit=crop",
+        "category": "army",
+        "isBuiltIn": true
+      },
+      {
+        "id": "army_3",
+        "title": "3D Combat Scene",
+        "description": "Intense 3D military combat scene",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop",
+        "category": "army",
+        "isBuiltIn": true
+      }
+    ],
+    "animals": [
+      {
+        "id": "animal_1",
+        "title": "3D Lion King",
+        "description": "Majestic 3D lion in nature",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=1920&h=1080&fit=crop",
+        "category": "animals",
+        "isBuiltIn": true
+      },
+      {
+        "id": "animal_2",
+        "title": "3D Tiger",
+        "description": "Powerful 3D tiger portrait",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?w=1920&h=1080&fit=crop",
+        "category": "animals",
+        "isBuiltIn": true
+      },
+      {
+        "id": "animal_3",
+        "title": "3D Eagle",
+        "description": "Majestic 3D eagle in flight",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=1920&h=1080&fit=crop",
+        "category": "animals",
+        "isBuiltIn": true
+      },
+      {
+        "id": "animal_4",
+        "title": "3D Wolf",
+        "description": "Wild 3D wolf in nature",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1517849849227-4f4589ca2d05?w=1920&h=1080&fit=crop",
+        "category": "animals",
+        "isBuiltIn": true
+      }
+    ],
     "nature": [
       {
         "id": "nature_1",
-        "title": "Forest Path",
-        "description": "Peaceful forest path",
+        "title": "3D Mountain Landscape",
+        "description": "Breathtaking 3D mountain scene",
         "type": "image",
-        "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+        "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=1920&h=1080&fit=crop",
         "category": "nature",
         "isBuiltIn": true
       },
       {
         "id": "nature_2",
-        "title": "Mountain View",
-        "description": "Majestic mountain view",
+        "title": "3D Forest Path",
+        "description": "Peaceful 3D forest path",
         "type": "image",
-        "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
+        "source": "https://images.unsplash.com/photo-1441974231531-c6227db76b6e?w=1920&h=1080&fit=crop",
         "category": "nature",
+        "isBuiltIn": true
+      },
+      {
+        "id": "nature_3",
+        "title": "3D Ocean Waves",
+        "description": "Calm 3D ocean waves",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1920&h=1080&fit=crop",
+        "category": "nature",
+        "isBuiltIn": true
+      },
+      {
+        "id": "nature_4",
+        "title": "3D Sunset Sky",
+        "description": "Beautiful 3D sunset colors",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=1920&h=1080&fit=crop",
+        "category": "nature",
+        "isBuiltIn": true
+      }
+    ],
+    "dolls": [
+      {
+        "id": "doll_1",
+        "title": "3D Doll Collection",
+        "description": "Beautiful 3D doll artwork",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1512486130939-2c4f79935e4f?w=1920&h=1080&fit=crop",
+        "category": "dolls",
+        "isBuiltIn": true
+      },
+      {
+        "id": "doll_2",
+        "title": "3D Fashion Doll",
+        "description": "Elegant 3D fashion doll design",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1517841905240-472988babdf9?w=1920&h=1080&fit=crop",
+        "category": "dolls",
+        "isBuiltIn": true
+      },
+      {
+        "id": "doll_3",
+        "title": "3D Character Doll",
+        "description": "Cute 3D character doll",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?w=1920&h=1080&fit=crop",
+        "category": "dolls",
         "isBuiltIn": true
       }
     ],
     "abstract": [
       {
         "id": "abstract_1",
-        "title": "Color Burst",
-        "description": "Vibrant color explosion",
+        "title": "3D Abstract Flow",
+        "description": "Dynamic 3D abstract design",
         "type": "image",
-        "source": "https://images.unsplash.com/photo-1557683316-973673baf926?w=800",
+        "source": "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=1920&h=1080&fit=crop",
         "category": "abstract",
         "isBuiltIn": true
       },
       {
         "id": "abstract_2",
-        "title": "Wave Pattern",
-        "description": "Flowing wave design",
+        "title": "3D Color Burst",
+        "description": "Vibrant 3D color explosion",
         "type": "image",
-        "source": "https://images.unsplash.com/photo-1557683316-973673baf926?w=800",
+        "source": "https://images.unsplash.com/photo-1557683316-973673baf926?w=1920&h=1080&fit=crop",
+        "category": "abstract",
+        "isBuiltIn": true
+      },
+      {
+        "id": "abstract_3",
+        "title": "3D Geometric Pattern",
+        "description": "Modern 3D geometric design",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=1920&h=1080&fit=crop",
         "category": "abstract",
         "isBuiltIn": true
       }
-    ],
-    "minimalist": [
-      {
-        "id": "minimalist_1",
-        "title": "Simple Lines",
-        "description": "Clean minimal design",
-        "type": "image",
-        "source": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
-        "category": "minimalist",
-        "isBuiltIn": true
-      }
-    ],
-    "dark": [],
-    "light": [],
-    "gradient": []
+    ]
   }
 }

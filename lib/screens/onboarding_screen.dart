@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animated_icons/flutter_animated_icons.dart';
 import '../providers/preferences_provider.dart';
 import '../themes/neumorphic_theme.dart';
 import '../widgets/neumorphic_button.dart';
@@ -20,35 +19,35 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   int _currentPage = 0;
 
   final List<OnboardingStep> _steps = [
-    OnboardingStep(
-      title: 'Browse Wallpapers',
-      description: 'Swipe through categories and discover beautiful wallpapers',
+    const OnboardingStep(
+      title: 'Discover 90+ HD Wallpapers',
+      description: 'Browse 15+ categories: Animals, Cars, Bikes, Nature, Anime, Ninja, and more!',
       icon: Icons.explore,
-      animation: AnimatedIcons.arrow_menu,
     ),
-    OnboardingStep(
-      title: 'Preview & Zoom',
-      description: 'Pinch to zoom and pan to see every detail',
-      icon: Icons.zoom_in,
-      animation: AnimatedIcons.view_list,
+    const OnboardingStep(
+      title: 'Search Everything',
+      description: 'Use the search bar to find images, videos, or GIFs by name, category, or type',
+      icon: Icons.search,
     ),
-    OnboardingStep(
-      title: 'Crop & Trim',
-      description: 'Adjust images or trim videos to fit perfectly',
-      icon: Icons.crop,
-      animation: AnimatedIcons.close_menu,
+    const OnboardingStep(
+      title: 'Animated Wallpapers',
+      description: 'Set videos (≤30s) and GIFs as live animated wallpapers on Android',
+      icon: Icons.animation,
     ),
-    OnboardingStep(
-      title: 'Set Wallpaper',
-      description: 'Set as home screen, lock screen, or both',
+    const OnboardingStep(
+      title: 'My Media Gallery',
+      description: 'Import from gallery or camera, organized into Images, Videos, and GIFs tabs',
+      icon: Icons.photo_library,
+    ),
+    const OnboardingStep(
+      title: 'Preview & Set',
+      description: 'Zoom, crop images, and set as home screen, lock screen, or both',
       icon: Icons.wallpaper,
-      animation: AnimatedIcons.play_pause,
     ),
-    OnboardingStep(
-      title: 'Favorites & Settings',
-      description: 'Save favorites and customize your experience',
+    const OnboardingStep(
+      title: 'Favorites & Refresh',
+      description: 'Save favorites, refresh media, and customize your experience',
       icon: Icons.favorite,
-      animation: AnimatedIcons.menu_arrow,
     ),
   ];
 
@@ -246,13 +245,11 @@ class OnboardingStep {
   final String title;
   final String description;
   final IconData icon;
-  final AnimatedIconData animation;
 
-  OnboardingStep({
+  const OnboardingStep({
     required this.title,
     required this.description,
     required this.icon,
-    required this.animation,
   });
 }
 
