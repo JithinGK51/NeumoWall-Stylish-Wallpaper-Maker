@@ -77,6 +77,9 @@ dependencies:
   
   # Image picker
   image_picker: ^1.0.7
+  
+  # Google Mobile Ads
+  google_mobile_ads: ^5.0.0
 
 dev_dependencies:
   flutter_test:
@@ -110,6 +113,21 @@ flutter:
     - assets/videos/
     - assets/icons/
     - assets/data/
+    - assets/data/animals.json
+    - assets/data/cars.json
+    - assets/data/bikes.json
+    - assets/data/nature.json
+    - assets/data/sea.json
+    - assets/data/ocean.json
+    - assets/data/fish.json
+    - assets/data/flowers.json
+    - assets/data/anime.json
+    - assets/data/ninja.json
+    - assets/data/ants.json
+    - assets/data/buildings.json
+    - assets/data/swords.json
+    - assets/data/guns.json
+    - assets/data/fighter_jets.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

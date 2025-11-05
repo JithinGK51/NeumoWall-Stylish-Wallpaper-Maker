@@ -1,0 +1,57 @@
+[
+  {
+    "id": "animal_1",
+    "title": "3D Lion King",
+    "description": "Majestic 3D lion in nature",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=1920&h=1080&fit=crop",
+    "category": "animals",
+    "isBuiltIn": true
+  },
+  {
+    "id": "animal_2",
+    "title": "3D Tiger",
+    "description": "Powerful 3D tiger portrait",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?w=1920&h=1080&fit=crop",
+    "category": "animals",
+    "isBuiltIn": true
+  },
+  {
+    "id": "animal_3",
+    "title": "3D Eagle",
+    "description": "Majestic 3D eagle in flight",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=1920&h=1080&fit=crop",
+    "category": "animals",
+    "isBuiltIn": true
+  },
+  {
+    "id": "animal_4",
+    "title": "3D Wolf",
+    "description": "Wild 3D wolf in nature",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1517849849227-4f4589ca2d05?w=1920&h=1080&fit=crop",
+    "category": "animals",
+    "isBuiltIn": true
+  },
+  {
+    "id": "animal_5",
+    "title": "3D Elephant",
+    "description": "Majestic 3D elephant",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1505148230895-d9a785a555fa?w=1920&h=1080&fit=crop",
+    "category": "animals",
+    "isBuiltIn": true
+  },
+  {
+    "id": "animal_6",
+    "title": "3D Bear",
+    "description": "Powerful 3D bear in forest",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1530595467537-0b5996c41f2d?w=1920&h=1080&fit=crop",
+    "category": "animals",
+    "isBuiltIn": true
+  }
+]
+

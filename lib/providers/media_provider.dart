@@ -1,10 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/media_item.dart';
 import '../services/media_service.dart';
+import '../services/search_service.dart';
 import 'preferences_provider.dart';
 
 final mediaServiceProvider = Provider<MediaService>((ref) {
   return MediaService();
+});
+
+final searchServiceProvider = Provider<SearchService>((ref) {
+  final mediaService = ref.read(mediaServiceProvider);
+  return SearchService(mediaService);
+});
+
+final searchResultsProvider = FutureProvider.family<List<MediaItem>, String>((ref, query) async {
+  final searchService = ref.read(searchServiceProvider);
+  return searchService.searchMedia(query);
 });
 
 final featuredMediaProvider = FutureProvider<List<MediaItem>>((ref) async {

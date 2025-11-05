@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../widgets/loading_indicator.dart';
+import '../widgets/ad_banner.dart';
 import '../providers/media_provider.dart';
 import '../themes/neumorphic_theme.dart';
 import '../utils/constants.dart';
@@ -19,67 +20,79 @@ class CategoriesScreen extends ConsumerWidget {
           title: const Text('Categories'),
           centerTitle: true,
         ),
-        body: categoriesAsync.when(
-          data: (categories) {
-            if (categories.isEmpty) {
-              return Center(
-                child: Text(
-                  'No categories available',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-              );
-            }
-
-            return LayoutBuilder(
-              builder: (context, constraints) {
-                final crossAxisCount = constraints.maxWidth > 600 ? 3 : 2;
-                final spacing = AppConstants.gridSpacing;
-                final padding = NeumorphicThemeConfig.defaultPadding;
-
-                return Padding(
-                  padding: EdgeInsets.all(padding),
-                  child: GridView.builder(
-                    gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                      crossAxisCount: crossAxisCount,
-                      childAspectRatio: 1.2,
-                      crossAxisSpacing: spacing,
-                      mainAxisSpacing: spacing,
-                    ),
-                    itemCount: categories.length,
-                    itemBuilder: (context, index) {
-                      final category = categories[index];
-                      return _CategoryCard(category: category);
-                    },
-                  ),
-                );
-              },
-            );
-          },
-          loading: () => const Center(child: LoadingIndicator()),
-          error: (error, stack) => Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.error_outline,
-                  size: 64,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Error loading categories',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 8),
-                TextButton(
-                  onPressed: () {
-                    ref.invalidate(categoriesProvider);
-                  },
-                  child: const Text('Retry'),
-                ),
-              ],
+        body: Column(
+          children: [
+            // Ad Banner
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AdBanner(screenName: 'Categories'),
             ),
-          ),
+            // Content
+            Expanded(
+              child: categoriesAsync.when(
+                data: (categories) {
+                  if (categories.isEmpty) {
+                    return Center(
+                      child: Text(
+                        'No categories available',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                    );
+                  }
+
+                  return LayoutBuilder(
+                    builder: (context, constraints) {
+                      final crossAxisCount = constraints.maxWidth > 600 ? 3 : 2;
+                      final spacing = AppConstants.gridSpacing;
+                      final padding = NeumorphicThemeConfig.defaultPadding;
+
+                      return Padding(
+                        padding: EdgeInsets.all(padding),
+                        child: GridView.builder(
+                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                            crossAxisCount: crossAxisCount,
+                            childAspectRatio: 1.2,
+                            crossAxisSpacing: spacing,
+                            mainAxisSpacing: spacing,
+                          ),
+                          itemCount: categories.length,
+                          itemBuilder: (context, index) {
+                            final category = categories[index];
+                            return _CategoryCard(category: category);
+                          },
+                        ),
+                      );
+                    },
+                  );
+                },
+                loading: () => const Center(child: LoadingIndicator()),
+                error: (error, stack) => Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 64,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Error loading categories',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton(
+                        onPressed: () {
+                          ref.invalidate(categoriesProvider);
+                        },
+                        child: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

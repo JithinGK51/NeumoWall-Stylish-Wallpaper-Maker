@@ -54,11 +54,25 @@ class MediaCard extends StatelessWidget {
         errorWidget: (context, url, error) => const Icon(Icons.error),
       );
     } else if (isAsset) {
-      imageWidget = Image.asset(
-        mediaItem.source,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
-      );
+      // For asset videos, show a placeholder (videos can't be displayed as static images)
+      // For GIFs, try to load as asset (Flutter supports animated GIFs)
+      if (mediaItem.type == MediaType.video) {
+        imageWidget = _buildAssetVideoGifPlaceholder(context);
+      } else if (mediaItem.type == MediaType.gif) {
+        // Try to load GIF as asset, fallback to placeholder if it fails
+        imageWidget = Image.asset(
+          mediaItem.source,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => _buildAssetVideoGifPlaceholder(context),
+        );
+      } else {
+        // For asset images, use Image.asset
+        imageWidget = Image.asset(
+          mediaItem.source,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => _buildAssetVideoGifPlaceholder(context),
+        );
+      }
     } else {
       // Local file - use Image.file for proper display
       final file = File(mediaItem.source);
@@ -93,6 +107,29 @@ class MediaCard extends StatelessWidget {
     return ClipRRect(
       borderRadius: BorderRadius.circular(NeumorphicThemeConfig.borderRadius),
       child: imageWidget,
+    );
+  }
+
+  Widget _buildAssetVideoGifPlaceholder(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Theme.of(context).colorScheme.primary.withOpacity(0.6),
+            Theme.of(context).colorScheme.secondary.withOpacity(0.6),
+            Theme.of(context).colorScheme.tertiary.withOpacity(0.6),
+          ],
+        ),
+      ),
+      child: Center(
+        child: Icon(
+          mediaItem.type == MediaType.gif ? Icons.animation : Icons.play_circle_outline,
+          size: 48,
+          color: Colors.white.withOpacity(0.8),
+        ),
+      ),
     );
   }
 

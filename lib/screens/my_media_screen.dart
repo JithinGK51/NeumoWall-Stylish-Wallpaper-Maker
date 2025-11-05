@@ -1,10 +1,9 @@
-import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:image_picker/image_picker.dart';
-import 'package:photo_manager/photo_manager.dart';
 import '../widgets/media_card.dart';
 import '../widgets/loading_indicator.dart';
+import '../widgets/ad_banner.dart';
 import '../providers/media_provider.dart';
 import '../providers/preferences_provider.dart';
 import '../utils/constants.dart';
@@ -37,7 +36,7 @@ class _MyMediaScreenState extends ConsumerState<MyMediaScreen> with SingleTicker
     super.dispose();
   }
 
-  Future<void> _pickFromGallery() async {
+  Future<void> _pickFromGallery({MediaType? type}) async {
     final hasPermission = await _permissionService.hasStoragePermission();
     if (!hasPermission) {
       final granted = await _permissionService.requestStoragePermission();
@@ -49,33 +48,45 @@ class _MyMediaScreenState extends ConsumerState<MyMediaScreen> with SingleTicker
       }
     }
 
-    final pickedFile = await _imagePicker.pickImage(source: ImageSource.gallery);
-    if (pickedFile != null && mounted) {
-      ref.invalidate(myMediaByFolderProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Image imported successfully')),
-      );
-    }
-  }
-
-  Future<void> _pickVideoFromGallery() async {
-    final hasPermission = await _permissionService.hasStoragePermission();
-    if (!hasPermission) {
-      final granted = await _permissionService.requestStoragePermission();
-      if (!granted && mounted) {
-        ScaffoldMessenger.of(context).showSnackBar(
-          const SnackBar(content: Text('Storage permission is required')),
+    try {
+      if (type == MediaType.image) {
+        // Use pickMultipleMedia for better multi-select support
+        final List<XFile>? pickedFiles = await _imagePicker.pickMultipleMedia(
+          imageQuality: 90,
         );
-        return;
+        if (pickedFiles != null && pickedFiles.isNotEmpty && mounted) {
+          ref.invalidate(myMediaByFolderProvider);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('${pickedFiles.length} image(s) imported successfully')),
+          );
+        }
+      } else if (type == MediaType.video) {
+        final XFile? pickedFile = await _imagePicker.pickVideo(
+          source: ImageSource.gallery,
+          maxDuration: const Duration(seconds: 30),
+        );
+        if (pickedFile != null && mounted) {
+          ref.invalidate(myMediaByFolderProvider);
+          ScaffoldMessenger.of(context).showSnackBar(
+            const SnackBar(content: Text('Video imported successfully')),
+          );
+        }
+      } else {
+        // Allow picking all types (images, videos, GIFs)
+        final List<XFile>? pickedFiles = await _imagePicker.pickMultipleMedia();
+        if (pickedFiles != null && pickedFiles.isNotEmpty && mounted) {
+          ref.invalidate(myMediaByFolderProvider);
+          ScaffoldMessenger.of(context).showSnackBar(
+            SnackBar(content: Text('${pickedFiles.length} media file(s) imported successfully')),
+          );
+        }
       }
-    }
-
-    final pickedFile = await _imagePicker.pickVideo(source: ImageSource.gallery);
-    if (pickedFile != null && mounted) {
-      ref.invalidate(myMediaByFolderProvider);
-      ScaffoldMessenger.of(context).showSnackBar(
-        const SnackBar(content: Text('Video imported successfully')),
-      );
+    } catch (e) {
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error importing media: $e')),
+        );
+      }
     }
   }
 
@@ -109,20 +120,20 @@ class _MyMediaScreenState extends ConsumerState<MyMediaScreen> with SingleTicker
           children: [
             ListTile(
               leading: const Icon(Icons.photo_library),
-              title: const Text('Import Image'),
-              subtitle: const Text('From gallery'),
+              title: const Text('Import Images'),
+              subtitle: const Text('Select multiple images from gallery'),
               onTap: () {
                 Navigator.pop(context);
-                _pickFromGallery();
+                _pickFromGallery(type: MediaType.image);
               },
             ),
             ListTile(
               leading: const Icon(Icons.video_library),
               title: const Text('Import Video'),
-              subtitle: const Text('From gallery'),
+              subtitle: const Text('Select video from gallery (≤30s)'),
               onTap: () {
                 Navigator.pop(context);
-                _pickVideoFromGallery();
+                _pickFromGallery(type: MediaType.video);
               },
             ),
             ListTile(
@@ -162,6 +173,12 @@ class _MyMediaScreenState extends ConsumerState<MyMediaScreen> with SingleTicker
               onPressed: _showImportDialog,
               icon: const Icon(Icons.add_photo_alternate),
               label: const Text('Import Media'),
+            ),
+            const SizedBox(height: 8),
+            TextButton.icon(
+              onPressed: () => ref.invalidate(myMediaByFolderProvider),
+              icon: const Icon(Icons.refresh),
+              label: const Text('Refresh'),
             ),
           ],
         ),
@@ -212,6 +229,20 @@ class _MyMediaScreenState extends ConsumerState<MyMediaScreen> with SingleTicker
     );
   }
 
+  Future<void> _refreshMedia() async {
+    ref.invalidate(myMediaByFolderProvider);
+    // Wait for the refresh to complete
+    await ref.read(myMediaByFolderProvider.future);
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        const SnackBar(
+          content: Text('Media refreshed'),
+          duration: Duration(seconds: 1),
+        ),
+      );
+    }
+  }
+
   @override
   Widget build(BuildContext context) {
     final mediaByFolderAsync = ref.watch(myMediaByFolderProvider);
@@ -240,48 +271,73 @@ class _MyMediaScreenState extends ConsumerState<MyMediaScreen> with SingleTicker
           ),
           actions: [
             IconButton(
+              icon: const Icon(Icons.refresh),
+              onPressed: _refreshMedia,
+              tooltip: 'Refresh Media',
+            ),
+            IconButton(
               icon: const Icon(Icons.add_photo_alternate),
               onPressed: _showImportDialog,
               tooltip: 'Import Media',
             ),
           ],
         ),
-        body: mediaByFolderAsync.when(
-          data: (mediaByFolder) {
-            return TabBarView(
-              controller: _tabController,
-              children: [
-                _buildMediaGrid(mediaByFolder['Images'] ?? []),
-                _buildMediaGrid(mediaByFolder['Videos'] ?? []),
-                _buildMediaGrid(mediaByFolder['GIFs'] ?? []),
-              ],
-            );
-          },
-          loading: () => const Center(child: LoadingIndicator()),
-          error: (error, stack) => Center(
-            child: Column(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Icon(
-                  Icons.error_outline,
-                  size: 64,
-                  color: Theme.of(context).colorScheme.error,
-                ),
-                const SizedBox(height: 16),
-                Text(
-                  'Error loading media',
-                  style: Theme.of(context).textTheme.bodyLarge,
-                ),
-                const SizedBox(height: 8),
-                TextButton(
-                  onPressed: () {
-                    ref.invalidate(myMediaByFolderProvider);
-                  },
-                  child: const Text('Retry'),
-                ),
-              ],
+        body: Column(
+          children: [
+            // Ad Banner
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AdBanner(screenName: 'My Media'),
             ),
-          ),
+            // Content
+            Expanded(
+              child: mediaByFolderAsync.when(
+                data: (mediaByFolder) {
+                  return TabBarView(
+                    controller: _tabController,
+                    children: [
+                      RefreshIndicator(
+                        onRefresh: _refreshMedia,
+                        child: _buildMediaGrid(mediaByFolder['Images'] ?? []),
+                      ),
+                      RefreshIndicator(
+                        onRefresh: _refreshMedia,
+                        child: _buildMediaGrid(mediaByFolder['Videos'] ?? []),
+                      ),
+                      RefreshIndicator(
+                        onRefresh: _refreshMedia,
+                        child: _buildMediaGrid(mediaByFolder['GIFs'] ?? []),
+                      ),
+                    ],
+                  );
+                },
+                loading: () => const Center(child: LoadingIndicator()),
+                error: (error, stack) => Center(
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    children: [
+                      Icon(
+                        Icons.error_outline,
+                        size: 64,
+                        color: Theme.of(context).colorScheme.error,
+                      ),
+                      const SizedBox(height: 16),
+                      Text(
+                        'Error loading media',
+                        style: Theme.of(context).textTheme.bodyLarge,
+                      ),
+                      const SizedBox(height: 8),
+                      TextButton.icon(
+                        onPressed: _refreshMedia,
+                        icon: const Icon(Icons.refresh),
+                        label: const Text('Retry'),
+                      ),
+                    ],
+                  ),
+                ),
+              ),
+            ),
+          ],
         ),
       ),
     );

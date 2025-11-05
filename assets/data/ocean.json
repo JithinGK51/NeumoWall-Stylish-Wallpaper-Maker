@@ -1,0 +1,57 @@
+[
+  {
+    "id": "ocean_1",
+    "title": "3D Ocean Horizon",
+    "description": "Vast 3D ocean horizon",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1920&h=1080&fit=crop",
+    "category": "ocean",
+    "isBuiltIn": true
+  },
+  {
+    "id": "ocean_2",
+    "title": "3D Blue Ocean",
+    "description": "Crystal clear 3D blue ocean",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1920&h=1080&fit=crop",
+    "category": "ocean",
+    "isBuiltIn": true
+  },
+  {
+    "id": "ocean_3",
+    "title": "3D Ocean Storm",
+    "description": "Dramatic 3D ocean storm",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1920&h=1080&fit=crop",
+    "category": "ocean",
+    "isBuiltIn": true
+  },
+  {
+    "id": "ocean_4",
+    "title": "3D Ocean Sunset",
+    "description": "Beautiful 3D ocean sunset",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1920&h=1080&fit=crop",
+    "category": "ocean",
+    "isBuiltIn": true
+  },
+  {
+    "id": "ocean_5",
+    "title": "3D Ocean Waves",
+    "description": "Powerful 3D ocean waves",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1920&h=1080&fit=crop",
+    "category": "ocean",
+    "isBuiltIn": true
+  },
+  {
+    "id": "ocean_6",
+    "title": "3D Ocean Depths",
+    "description": "Mysterious 3D ocean depths",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=1920&h=1080&fit=crop",
+    "category": "ocean",
+    "isBuiltIn": true
+  }
+]
+

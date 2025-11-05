@@ -56,15 +56,26 @@ class MediaService {
 
   Future<List<MediaItem>> getMediaByCategory(String categoryId) async {
     try {
-      final manifestData =
-          await rootBundle.loadString(AppConstants.curatedContentManifest);
-      final json = jsonDecode(manifestData) as Map<String, dynamic>;
-      final Map<String, dynamic> categoriesData = json['mediaByCategory'] ?? {};
-      final List<dynamic> items = categoriesData[categoryId] ?? [];
-      
-      return items
-          .map((item) => MediaItem.fromJson(item as Map<String, dynamic>))
-          .toList();
+      // First try to load from category-specific file
+      final categoryFileName = 'assets/data/$categoryId.json';
+      try {
+        final categoryData = await rootBundle.loadString(categoryFileName);
+        final List<dynamic> items = jsonDecode(categoryData) as List<dynamic>;
+        return items
+            .map((item) => MediaItem.fromJson(item as Map<String, dynamic>))
+            .toList();
+      } catch (e) {
+        // If category file doesn't exist, fall back to main manifest
+        final manifestData =
+            await rootBundle.loadString(AppConstants.curatedContentManifest);
+        final json = jsonDecode(manifestData) as Map<String, dynamic>;
+        final Map<String, dynamic> categoriesData = json['mediaByCategory'] ?? {};
+        final List<dynamic> items = categoriesData[categoryId] ?? [];
+        
+        return items
+            .map((item) => MediaItem.fromJson(item as Map<String, dynamic>))
+            .toList();
+      }
     } catch (e) {
       return [];
     }
@@ -122,7 +133,7 @@ class MediaService {
       for (final asset in videoAssets) {
         final file = await asset.file;
         if (file != null) {
-          final fileInfo = await file;
+          final fileInfo = file;
           final durationSeconds = asset.duration;
           if (durationSeconds != null && durationSeconds <= AppConstants.maxVideoDurationSeconds) {
             mediaItems.add(MediaItem(
