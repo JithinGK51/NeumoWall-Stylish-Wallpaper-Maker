@@ -45,13 +45,23 @@ class WallpaperService {
       }
 
       // For images, resize to device screen size
+      // Note: Videos and GIFs will use live wallpaper (animated) if supported, otherwise static first frame
       if (mediaItem.isImage) {
         filePath = await _resizeImageForWallpaper(filePath);
+      }
+
+      // Determine media type for native code
+      String mediaType = 'image';
+      if (mediaItem.type == MediaType.video) {
+        mediaType = 'video';
+      } else if (mediaItem.type == MediaType.gif) {
+        mediaType = 'gif';
       }
 
       final Map<String, dynamic> args = {
         'filePath': filePath,
         'wallpaperType': wallpaperType.toString().split('.').last,
+        'mediaType': mediaType,
       };
 
       final bool result = await _channel.invokeMethod('setWallpaper', args);
@@ -109,7 +119,15 @@ class WallpaperService {
   Future<String> _prepareWallpaperFile(MediaItem mediaItem) async {
     try {
       final directory = await getTemporaryDirectory();
-      final extension = mediaItem.isImage ? 'jpg' : 'mp4';
+      // Determine correct file extension based on media type
+      String extension;
+      if (mediaItem.isImage) {
+        extension = 'jpg';
+      } else if (mediaItem.type == MediaType.gif) {
+        extension = 'gif';
+      } else {
+        extension = 'mp4'; // For videos
+      }
       final fileName = '${mediaItem.id}_${DateTime.now().millisecondsSinceEpoch}.$extension';
       final filePath = '${directory.path}/$fileName';
       final file = File(filePath);

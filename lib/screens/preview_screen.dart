@@ -33,7 +33,8 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     super.initState();
     _transformationController = TransformationController();
     
-    if (widget.mediaItem.isVideo) {
+    // Only initialize video for actual video files, not GIFs
+    if (widget.mediaItem.type == MediaType.video) {
       _initializeVideo();
     }
   }
@@ -242,9 +243,9 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
           children: [
             // Media preview
             Center(
-              child: widget.mediaItem.isImage
-                  ? _buildImagePreview()
-                  : _buildVideoPreview(),
+              child: widget.mediaItem.type == MediaType.video
+                  ? _buildVideoPreview()
+                  : _buildImagePreview(), // Images and GIFs use image preview
             ),
 
             // Top app bar
@@ -319,7 +320,7 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (widget.mediaItem.isVideo) _buildVideoControls(),
+                    if (widget.mediaItem.type == MediaType.video) _buildVideoControls(),
                     const SizedBox(height: 16),
                     NeumorphicButton(
                       label: 'Set Wallpaper',

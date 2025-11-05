@@ -1,3 +1,4 @@
+import 'dart:io';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/media_item.dart';
@@ -30,6 +31,7 @@ class MediaCard extends StatelessWidget {
         children: [
           _buildMediaThumbnail(context),
           if (mediaItem.isVideo) _buildVideoIndicator(context),
+          if (mediaItem.type == MediaType.gif) _buildGifIndicator(context),
           if (onFavoriteToggle != null) _buildFavoriteButton(context),
         ],
       ),
@@ -58,11 +60,34 @@ class MediaCard extends StatelessWidget {
         errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
       );
     } else {
-      imageWidget = Image.asset(
-        'assets/images/placeholder.png',
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
-      );
+      // Local file - use Image.file for proper display
+      final file = File(mediaItem.source);
+      if (file.existsSync()) {
+        imageWidget = Image.file(
+          file,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => Container(
+            color: Colors.grey[300],
+            child: const Icon(Icons.broken_image, color: Colors.grey),
+          ),
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            if (wasSynchronouslyLoaded) return child;
+            return frame == null
+                ? Container(
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : child;
+          },
+        );
+      } else {
+        imageWidget = Container(
+          color: Colors.grey[300],
+          child: const Icon(Icons.broken_image, color: Colors.grey),
+        );
+      }
     }
 
     return ClipRRect(
@@ -102,6 +127,42 @@ class MediaCard extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGifIndicator(BuildContext context) {
+    return Positioned(
+      bottom: 8,
+      left: 8,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: 4,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.animation,
+              color: Colors.white,
+              size: 16,
+            ),
+            SizedBox(width: 4),
+            Text(
+              'GIF',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
       ),
