@@ -81,7 +81,7 @@ class MediaService {
         hasAll: true,
       ).then((paths) async {
         if (paths.isEmpty) return [];
-        return await paths.first.getAssetListRange(start: 0, end: 100);
+        return await paths.first.getAssetListRange(start: 0, end: 1000);
       });
 
       // Also get videos
@@ -90,7 +90,7 @@ class MediaService {
         hasAll: true,
       ).then((paths) async {
         if (paths.isEmpty) return [];
-        return await paths.first.getAssetListRange(start: 0, end: 50);
+        return await paths.first.getAssetListRange(start: 0, end: 500);
       });
 
       final List<MediaItem> mediaItems = [];
@@ -98,11 +98,20 @@ class MediaService {
       for (final asset in assets) {
         final file = await asset.file;
         if (file != null) {
+          final filePath = file.path;
+          final fileName = filePath.toLowerCase();
+          
+          // Detect GIF files
+          MediaType mediaType = MediaType.image;
+          if (fileName.endsWith('.gif')) {
+            mediaType = MediaType.gif;
+          }
+          
           mediaItems.add(MediaItem(
             id: asset.id,
             title: asset.title ?? 'Image',
-            type: MediaType.image,
-            source: file.path,
+            type: mediaType,
+            source: filePath,
             isBuiltIn: false,
             createdAt: asset.createDateTime,
             fileSize: file.lengthSync(),
@@ -130,10 +139,40 @@ class MediaService {
         }
       }
 
+      // Sort by creation date (newest first)
+      mediaItems.sort((a, b) {
+        final dateA = a.createdAt ?? DateTime(1970);
+        final dateB = b.createdAt ?? DateTime(1970);
+        return dateB.compareTo(dateA);
+      });
+
       return mediaItems;
     } catch (e) {
       return [];
     }
+  }
+  
+  // Get media organized by type (folder-based)
+  Future<Map<String, List<MediaItem>>> getUserMediaByFolder() async {
+    final allMedia = await getUserMedia();
+    
+    final Map<String, List<MediaItem>> organizedMedia = {
+      'Images': [],
+      'Videos': [],
+      'GIFs': [],
+    };
+    
+    for (final item in allMedia) {
+      if (item.type == MediaType.image) {
+        organizedMedia['Images']!.add(item);
+      } else if (item.type == MediaType.video) {
+        organizedMedia['Videos']!.add(item);
+      } else if (item.type == MediaType.gif) {
+        organizedMedia['GIFs']!.add(item);
+      }
+    }
+    
+    return organizedMedia;
   }
 
   List<MediaItem> getFavorites(Set<String> favoriteIds) {
