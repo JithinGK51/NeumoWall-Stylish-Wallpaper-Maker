@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<!-- Add these keys to your Info.plist -->
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>NeumoWall needs access to your photo library to save wallpapers and import your photos.</string>
+	
+	<key>NSPhotoLibraryAddUsageDescription</key>
+	<string>NeumoWall needs permission to save wallpapers to your photo library.</string>
+	
+	<key>NSCameraUsageDescription</key>
+	<string>NeumoWall needs camera access to capture photos for wallpapers.</string>
+	
+	<key>NSPhotoLibraryUsageDescription</key>
+	<string>NeumoWall needs access to your photos to set them as wallpapers.</string>
+</dict>
+</plist>
+
