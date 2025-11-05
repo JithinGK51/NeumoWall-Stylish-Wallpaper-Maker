@@ -1,10 +1,21 @@
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import '../models/media_item.dart';
 import '../services/media_service.dart';
+import '../services/search_service.dart';
 import 'preferences_provider.dart';
 
 final mediaServiceProvider = Provider<MediaService>((ref) {
   return MediaService();
+});
+
+final searchServiceProvider = Provider<SearchService>((ref) {
+  final mediaService = ref.read(mediaServiceProvider);
+  return SearchService(mediaService);
+});
+
+final searchResultsProvider = FutureProvider.family<List<MediaItem>, String>((ref, query) async {
+  final searchService = ref.read(searchServiceProvider);
+  return searchService.searchMedia(query);
 });
 
 final featuredMediaProvider = FutureProvider<List<MediaItem>>((ref) async {
@@ -30,11 +41,17 @@ final favoritesProvider = FutureProvider<List<MediaItem>>((ref) async {
   // Ensure featured media is loaded first
   await ref.read(featuredMediaProvider.future);
   
-  return service.getFavorites(prefs.favoriteIds);
+  // getFavorites now includes user media
+  return await service.getFavorites(prefs.favoriteIds);
 });
 
 final myMediaProvider = FutureProvider<List<MediaItem>>((ref) async {
   final service = ref.read(mediaServiceProvider);
   return service.getUserMedia();
+});
+
+final myMediaByFolderProvider = FutureProvider<Map<String, List<MediaItem>>>((ref) async {
+  final service = ref.read(mediaServiceProvider);
+  return service.getUserMediaByFolder();
 });
 

@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
-import 'package:flutter_animated_icons/flutter_animated_icons.dart';
 import '../providers/preferences_provider.dart';
 import '../themes/neumorphic_theme.dart';
 import '../widgets/neumorphic_button.dart';
@@ -20,35 +19,30 @@ class _OnboardingScreenState extends ConsumerState<OnboardingScreen> {
   int _currentPage = 0;
 
   final List<OnboardingStep> _steps = [
-    OnboardingStep(
+    const OnboardingStep(
       title: 'Browse Wallpapers',
       description: 'Swipe through categories and discover beautiful wallpapers',
       icon: Icons.explore,
-      animation: AnimatedIcons.arrow_menu,
     ),
-    OnboardingStep(
+    const OnboardingStep(
       title: 'Preview & Zoom',
       description: 'Pinch to zoom and pan to see every detail',
       icon: Icons.zoom_in,
-      animation: AnimatedIcons.view_list,
     ),
-    OnboardingStep(
+    const OnboardingStep(
       title: 'Crop & Trim',
       description: 'Adjust images or trim videos to fit perfectly',
       icon: Icons.crop,
-      animation: AnimatedIcons.close_menu,
     ),
-    OnboardingStep(
+    const OnboardingStep(
       title: 'Set Wallpaper',
       description: 'Set as home screen, lock screen, or both',
       icon: Icons.wallpaper,
-      animation: AnimatedIcons.play_pause,
     ),
-    OnboardingStep(
+    const OnboardingStep(
       title: 'Favorites & Settings',
       description: 'Save favorites and customize your experience',
       icon: Icons.favorite,
-      animation: AnimatedIcons.menu_arrow,
     ),
   ];
 
@@ -246,13 +240,11 @@ class OnboardingStep {
   final String title;
   final String description;
   final IconData icon;
-  final AnimatedIconData animation;
 
-  OnboardingStep({
+  const OnboardingStep({
     required this.title,
     required this.description,
     required this.icon,
-    required this.animation,
   });
 }
 

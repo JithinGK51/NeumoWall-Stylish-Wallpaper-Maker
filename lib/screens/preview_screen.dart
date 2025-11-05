@@ -1,11 +1,13 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:video_player/video_player.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:path_provider/path_provider.dart';
 import '../models/media_item.dart';
 import '../services/wallpaper_service.dart';
 import '../themes/neumorphic_theme.dart';
@@ -33,7 +35,8 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     super.initState();
     _transformationController = TransformationController();
     
-    if (widget.mediaItem.isVideo) {
+    // Only initialize video for actual video files, not GIFs
+    if (widget.mediaItem.type == MediaType.video) {
       _initializeVideo();
     }
   }
@@ -42,10 +45,16 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     try {
       String videoPath = widget.mediaItem.source;
       
-      // Handle asset paths
+      // Handle asset paths - copy to temp file first
       if (videoPath.startsWith('assets/')) {
-        // Asset videos would need special handling
-        return;
+        final tempDir = await getTemporaryDirectory();
+        final fileName = videoPath.split('/').last;
+        final tempFile = File('${tempDir.path}/$fileName');
+        
+        // Copy asset to temp file
+        final byteData = await rootBundle.load(videoPath);
+        await tempFile.writeAsBytes(byteData.buffer.asUint8List());
+        videoPath = tempFile.path;
       }
 
       _videoController = VideoPlayerController.file(File(videoPath));
@@ -57,7 +66,11 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
         _isVideoInitialized = true;
       });
     } catch (e) {
-      // Handle error
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading video: $e')),
+        );
+      }
     }
   }
 
@@ -242,9 +255,9 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
           children: [
             // Media preview
             Center(
-              child: widget.mediaItem.isImage
-                  ? _buildImagePreview()
-                  : _buildVideoPreview(),
+              child: widget.mediaItem.type == MediaType.video
+                  ? _buildVideoPreview()
+                  : _buildImagePreview(), // Images and GIFs use image preview
             ),
 
             // Top app bar
@@ -319,7 +332,7 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (widget.mediaItem.isVideo) _buildVideoControls(),
+                    if (widget.mediaItem.type == MediaType.video) _buildVideoControls(),
                     const SizedBox(height: 16),
                     NeumorphicButton(
                       label: 'Set Wallpaper',
@@ -343,6 +356,28 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     
     // Use cropped image if available
     final imageSource = _croppedImagePath ?? widget.mediaItem.source;
+
+    // For GIFs, try to load as asset or file
+    if (widget.mediaItem.type == MediaType.gif) {
+      return InteractiveViewer(
+        transformationController: _transformationController,
+        minScale: AppConstants.minZoomScale,
+        maxScale: AppConstants.maxZoomScale,
+        child: Center(
+          child: isAsset
+              ? Image.asset(
+                  imageSource,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.error, color: Colors.white),
+                )
+              : Image.file(
+                  File(imageSource),
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.error, color: Colors.white),
+                ),
+        ),
+      );
+    }
 
     return InteractiveViewer(
       transformationController: _transformationController,

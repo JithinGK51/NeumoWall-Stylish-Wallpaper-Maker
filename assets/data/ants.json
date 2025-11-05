@@ -1,0 +1,57 @@
+[
+  {
+    "id": "ant_1",
+    "title": "3D Ant Colony",
+    "description": "Detailed 3D ant colony",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=1920&h=1080&fit=crop",
+    "category": "ants",
+    "isBuiltIn": true
+  },
+  {
+    "id": "ant_2",
+    "title": "3D Worker Ant",
+    "description": "Hardworking 3D ant",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?w=1920&h=1080&fit=crop",
+    "category": "ants",
+    "isBuiltIn": true
+  },
+  {
+    "id": "ant_3",
+    "title": "3D Ant Macro",
+    "description": "Close-up 3D ant",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1437622368342-7a3d73a34c8f?w=1920&h=1080&fit=crop",
+    "category": "ants",
+    "isBuiltIn": true
+  },
+  {
+    "id": "ant_4",
+    "title": "3D Ant Warrior",
+    "description": "Fierce 3D ant warrior",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1517849849227-4f4589ca2d05?w=1920&h=1080&fit=crop",
+    "category": "ants",
+    "isBuiltIn": true
+  },
+  {
+    "id": "ant_5",
+    "title": "3D Ant Queen",
+    "description": "Regal 3D ant queen",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1546182990-dffeafbe841d?w=1920&h=1080&fit=crop",
+    "category": "ants",
+    "isBuiltIn": true
+  },
+  {
+    "id": "ant_6",
+    "title": "3D Ant Tunnel",
+    "description": "Intricate 3D ant tunnel",
+    "type": "image",
+    "source": "https://images.unsplash.com/photo-1551969014-7d2c4cddf0b6?w=1920&h=1080&fit=crop",
+    "category": "ants",
+    "isBuiltIn": true
+  }
+]
+

@@ -39,6 +39,11 @@ android {
     }
 }
 
+// Suppress warnings about obsolete Java source/target versions from dependencies
+tasks.withType<JavaCompile> {
+    options.compilerArgs.add("-Xlint:-options")
+}
+
 flutter {
     source = "../.."
 }

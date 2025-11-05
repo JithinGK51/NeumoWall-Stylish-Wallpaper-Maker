@@ -6,9 +6,13 @@ import 'providers/preferences_provider.dart';
 import 'models/user_preferences.dart';
 import 'screens/splash_screen.dart';
 import 'utils/constants.dart';
+import 'services/ad_service.dart';
 
-void main() {
+void main() async {
   WidgetsFlutterBinding.ensureInitialized();
+  
+  // Initialize Google Mobile Ads
+  await AdService.initialize();
   
   // Set preferred orientations
   SystemChrome.setPreferredOrientations([
