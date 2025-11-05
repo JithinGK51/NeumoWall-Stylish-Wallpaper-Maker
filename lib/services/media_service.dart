@@ -175,7 +175,7 @@ class MediaService {
     return organizedMedia;
   }
 
-  List<MediaItem> getFavorites(Set<String> favoriteIds) {
+  Future<List<MediaItem>> getFavorites(Set<String> favoriteIds) async {
     if (favoriteIds.isEmpty) {
       return [];
     }
@@ -186,6 +186,14 @@ class MediaService {
     // Add built-in featured media
     if (_cachedBuiltInMedia != null) {
       allMedia.addAll(_cachedBuiltInMedia!);
+    }
+    
+    // Add user media (from gallery)
+    try {
+      final userMedia = await getUserMedia();
+      allMedia.addAll(userMedia);
+    } catch (e) {
+      // If user media fails to load, continue with built-in only
     }
     
     // Filter favorites from all media

@@ -30,7 +30,8 @@ final favoritesProvider = FutureProvider<List<MediaItem>>((ref) async {
   // Ensure featured media is loaded first
   await ref.read(featuredMediaProvider.future);
   
-  return service.getFavorites(prefs.favoriteIds);
+  // getFavorites now includes user media
+  return await service.getFavorites(prefs.favoriteIds);
 });
 
 final myMediaProvider = FutureProvider<List<MediaItem>>((ref) async {

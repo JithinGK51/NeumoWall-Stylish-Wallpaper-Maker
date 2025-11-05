@@ -44,31 +44,116 @@
       "source": "https://images.unsplash.com/photo-1557683316-973673baf926?w=800",
       "category": "abstract",
       "isBuiltIn": true
+    },
+    {
+      "id": "featured_6",
+      "title": "Ocean Waves",
+      "description": "Calm ocean waves",
+      "type": "image",
+      "source": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800",
+      "category": "nature",
+      "isBuiltIn": true
+    },
+    {
+      "id": "featured_7",
+      "title": "City Lights",
+      "description": "Urban cityscape at night",
+      "type": "image",
+      "source": "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=800",
+      "category": "dark",
+      "isBuiltIn": true
+    },
+    {
+      "id": "featured_8",
+      "title": "Sunset Sky",
+      "description": "Beautiful sunset colors",
+      "type": "image",
+      "source": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800",
+      "category": "nature",
+      "isBuiltIn": true
+    },
+    {
+      "id": "featured_9",
+      "title": "Abstract Flow",
+      "description": "Flowing abstract design",
+      "type": "image",
+      "source": "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=800",
+      "category": "abstract",
+      "isBuiltIn": true
+    },
+    {
+      "id": "featured_10",
+      "title": "Minimalist Geometric",
+      "description": "Simple geometric shapes",
+      "type": "image",
+      "source": "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=800",
+      "category": "minimalist",
+      "isBuiltIn": true
+    },
+    {
+      "id": "featured_gif_1",
+      "title": "Animated Gradient",
+      "description": "Smooth animated gradient",
+      "type": "gif",
+      "source": "assets/videos/gradient_animation.gif",
+      "category": "gradient",
+      "isBuiltIn": true,
+      "duration": 3
+    },
+    {
+      "id": "featured_gif_2",
+      "title": "Flowing Particles",
+      "description": "Animated particle flow",
+      "type": "gif",
+      "source": "assets/videos/particles_animation.gif",
+      "category": "abstract",
+      "isBuiltIn": true,
+      "duration": 4
+    },
+    {
+      "id": "featured_video_1",
+      "title": "Ocean Waves Video",
+      "description": "Calm ocean waves (15s)",
+      "type": "video",
+      "source": "assets/videos/ocean_waves.mp4",
+      "category": "nature",
+      "isBuiltIn": true,
+      "duration": 15
+    },
+    {
+      "id": "featured_video_2",
+      "title": "Abstract Motion",
+      "description": "Abstract motion video (20s)",
+      "type": "video",
+      "source": "assets/videos/abstract_motion.mp4",
+      "category": "abstract",
+      "isBuiltIn": true,
+      "duration": 20
     }
   ],
   "categories": [
     {
       "id": "nature",
       "name": "Nature",
-      "itemCount": 2,
+      "itemCount": 4,
       "description": "Beautiful nature wallpapers"
     },
     {
       "id": "abstract",
       "name": "Abstract",
-      "itemCount": 2,
+      "itemCount": 4,
       "description": "Abstract art wallpapers"
     },
     {
       "id": "minimalist",
       "name": "Minimalist",
-      "itemCount": 1,
+      "itemCount": 2,
       "description": "Clean minimalist designs"
     },
     {
       "id": "dark",
       "name": "Dark",
-      "itemCount": 0,
+      "itemCount": 1,
       "description": "Dark theme wallpapers"
     },
     {
@@ -80,7 +165,7 @@
     {
       "id": "gradient",
       "name": "Gradient",
-      "itemCount": 0,
+      "itemCount": 1,
       "description": "Gradient wallpapers"
     }
   ],
@@ -103,6 +188,34 @@
         "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
         "category": "nature",
         "isBuiltIn": true
+      },
+      {
+        "id": "nature_3",
+        "title": "Beach Sunset",
+        "description": "Tropical beach at sunset",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1505142468610-359e7d316be0?w=800",
+        "category": "nature",
+        "isBuiltIn": true
+      },
+      {
+        "id": "nature_4",
+        "title": "Mountain Range",
+        "description": "Snow-capped mountain range",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1501594907352-04cda38ebc29?w=800",
+        "category": "nature",
+        "isBuiltIn": true
+      },
+      {
+        "id": "nature_video_1",
+        "title": "Ocean Waves",
+        "description": "Calm ocean waves video",
+        "type": "video",
+        "source": "assets/videos/ocean_waves.mp4",
+        "category": "nature",
+        "isBuiltIn": true,
+        "duration": 15
       }
     ],
     "abstract": [
@@ -123,6 +236,35 @@
         "source": "https://images.unsplash.com/photo-1557683316-973673baf926?w=800",
         "category": "abstract",
         "isBuiltIn": true
+      },
+      {
+        "id": "abstract_3",
+        "title": "Fluid Motion",
+        "description": "Dynamic fluid design",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=800",
+        "category": "abstract",
+        "isBuiltIn": true
+      },
+      {
+        "id": "abstract_gif_1",
+        "title": "Particle Animation",
+        "description": "Animated particle flow",
+        "type": "gif",
+        "source": "assets/videos/particles_animation.gif",
+        "category": "abstract",
+        "isBuiltIn": true,
+        "duration": 4
+      },
+      {
+        "id": "abstract_video_1",
+        "title": "Abstract Motion",
+        "description": "Abstract motion video",
+        "type": "video",
+        "source": "assets/videos/abstract_motion.mp4",
+        "category": "abstract",
+        "isBuiltIn": true,
+        "duration": 20
       }
     ],
     "minimalist": [
@@ -134,10 +276,40 @@
         "source": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
         "category": "minimalist",
         "isBuiltIn": true
+      },
+      {
+        "id": "minimalist_2",
+        "title": "Geometric Minimal",
+        "description": "Simple geometric shapes",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1557672172-298e090bd0f1?w=800",
+        "category": "minimalist",
+        "isBuiltIn": true
       }
     ],
-    "dark": [],
+    "dark": [
+      {
+        "id": "dark_1",
+        "title": "City Lights",
+        "description": "Urban cityscape at night",
+        "type": "image",
+        "source": "https://images.unsplash.com/photo-1514565131-fce0801e5785?w=800",
+        "category": "dark",
+        "isBuiltIn": true
+      }
+    ],
     "light": [],
-    "gradient": []
+    "gradient": [
+      {
+        "id": "gradient_1",
+        "title": "Animated Gradient",
+        "description": "Smooth animated gradient",
+        "type": "gif",
+        "source": "assets/videos/gradient_animation.gif",
+        "category": "gradient",
+        "isBuiltIn": true,
+        "duration": 3
+      }
+    ]
   }
 }
