@@ -1,143 +1,37 @@
 {
   "featured": [
     {
-      "id": "featured_1",
-      "title": "Abstract Gradient",
-      "description": "Beautiful abstract gradient wallpaper",
+      "id": "featured_knight_1",
+      "title": "Knight Warrior",
+      "description": "Powerful knight warrior in armor",
       "type": "image",
-      "source": "https://images.unsplash.com/photo-1557683316-973673baf926?w=800",
-      "category": "abstract",
+      "source": "assets/images/knights/knight_warrior_01.jpg",
+      "category": "knights",
       "isBuiltIn": true
     },
     {
-      "id": "featured_2",
-      "title": "Nature Landscape",
-      "description": "Serene nature landscape",
+      "id": "featured_game_1",
+      "title": "PUBG Character Crouch",
+      "description": "PUBG-style character with Level 3 helmet in crouching pose",
       "type": "image",
-      "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-      "category": "nature",
-      "isBuiltIn": true
-    },
-    {
-      "id": "featured_3",
-      "title": "Minimalist Design",
-      "description": "Clean minimalist wallpaper",
-      "type": "image",
-      "source": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
-      "category": "minimalist",
-      "isBuiltIn": true
-    },
-    {
-      "id": "featured_4",
-      "title": "Mountain Sunset",
-      "description": "Breathtaking mountain sunset",
-      "type": "image",
-      "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-      "category": "nature",
-      "isBuiltIn": true
-    },
-    {
-      "id": "featured_5",
-      "title": "Geometric Pattern",
-      "description": "Modern geometric design",
-      "type": "image",
-      "source": "https://images.unsplash.com/photo-1557683316-973673baf926?w=800",
-      "category": "abstract",
+      "source": "assets/images/games/game_pubg_character_crouch_helmet_01.jpg",
+      "category": "games",
       "isBuiltIn": true
     }
   ],
   "categories": [
     {
-      "id": "nature",
-      "name": "Nature",
-      "itemCount": 2,
-      "description": "Beautiful nature wallpapers"
+      "id": "knights",
+      "name": "Knights",
+      "itemCount": 5,
+      "description": "Epic 3D knight wallpapers"
     },
     {
-      "id": "abstract",
-      "name": "Abstract",
-      "itemCount": 2,
-      "description": "Abstract art wallpapers"
-    },
-    {
-      "id": "minimalist",
-      "name": "Minimalist",
+      "id": "games",
+      "name": "Games",
       "itemCount": 1,
-      "description": "Clean minimalist designs"
-    },
-    {
-      "id": "dark",
-      "name": "Dark",
-      "itemCount": 0,
-      "description": "Dark theme wallpapers"
-    },
-    {
-      "id": "light",
-      "name": "Light",
-      "itemCount": 0,
-      "description": "Light theme wallpapers"
-    },
-    {
-      "id": "gradient",
-      "name": "Gradient",
-      "itemCount": 0,
-      "description": "Gradient wallpapers"
+      "description": "Cool 3D gaming wallpapers"
     }
   ],
-  "mediaByCategory": {
-    "nature": [
-      {
-        "id": "nature_1",
-        "title": "Forest Path",
-        "description": "Peaceful forest path",
-        "type": "image",
-        "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-        "category": "nature",
-        "isBuiltIn": true
-      },
-      {
-        "id": "nature_2",
-        "title": "Mountain View",
-        "description": "Majestic mountain view",
-        "type": "image",
-        "source": "https://images.unsplash.com/photo-1506905925346-21bda4d32df4?w=800",
-        "category": "nature",
-        "isBuiltIn": true
-      }
-    ],
-    "abstract": [
-      {
-        "id": "abstract_1",
-        "title": "Color Burst",
-        "description": "Vibrant color explosion",
-        "type": "image",
-        "source": "https://images.unsplash.com/photo-1557683316-973673baf926?w=800",
-        "category": "abstract",
-        "isBuiltIn": true
-      },
-      {
-        "id": "abstract_2",
-        "title": "Wave Pattern",
-        "description": "Flowing wave design",
-        "type": "image",
-        "source": "https://images.unsplash.com/photo-1557683316-973673baf926?w=800",
-        "category": "abstract",
-        "isBuiltIn": true
-      }
-    ],
-    "minimalist": [
-      {
-        "id": "minimalist_1",
-        "title": "Simple Lines",
-        "description": "Clean minimal design",
-        "type": "image",
-        "source": "https://images.unsplash.com/photo-1558618666-fcd25c85cd64?w=800",
-        "category": "minimalist",
-        "isBuiltIn": true
-      }
-    ],
-    "dark": [],
-    "light": [],
-    "gradient": []
-  }
+  "mediaByCategory": {}
 }
