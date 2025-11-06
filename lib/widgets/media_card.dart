@@ -1,3 +1,5 @@
+import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/media_item.dart';
@@ -30,6 +32,7 @@ class MediaCard extends StatelessWidget {
         children: [
           _buildMediaThumbnail(context),
           if (mediaItem.isVideo) _buildVideoIndicator(context),
+          if (mediaItem.type == MediaType.gif) _buildGifIndicator(context),
           if (onFavoriteToggle != null) _buildFavoriteButton(context),
         ],
       ),
@@ -52,22 +55,125 @@ class MediaCard extends StatelessWidget {
         errorWidget: (context, url, error) => const Icon(Icons.error),
       );
     } else if (isAsset) {
-      imageWidget = Image.asset(
-        mediaItem.source,
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
-      );
+      // For asset videos, show a placeholder (videos can't be displayed as static images)
+      // For GIFs, try to load as asset (Flutter supports animated GIFs)
+      if (mediaItem.type == MediaType.video) {
+        imageWidget = _buildAssetVideoGifPlaceholder(context);
+      } else if (mediaItem.type == MediaType.gif) {
+        // Try to load GIF as asset, fallback to placeholder if it fails
+        imageWidget = Image.asset(
+          mediaItem.source,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            debugPrint('Error loading asset GIF: ${mediaItem.source} - $error');
+            return _buildAssetVideoGifPlaceholder(context);
+          },
+        );
+      } else {
+        // For asset images, use Image.asset
+        imageWidget = Image.asset(
+          mediaItem.source,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) {
+            debugPrint('Error loading asset image: ${mediaItem.source} - $error');
+            return _buildImageErrorPlaceholder(context);
+          },
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            if (wasSynchronouslyLoaded) return child;
+            return frame == null
+                ? Container(
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : child;
+          },
+        );
+      }
     } else {
-      imageWidget = Image.asset(
-        'assets/images/placeholder.png',
-        fit: BoxFit.cover,
-        errorBuilder: (context, error, stackTrace) => const Icon(Icons.error),
-      );
+      // Local file - use Image.file for proper display
+      final file = File(mediaItem.source);
+      if (file.existsSync()) {
+        imageWidget = Image.file(
+          file,
+          fit: BoxFit.cover,
+          errorBuilder: (context, error, stackTrace) => Container(
+            color: Colors.grey[300],
+            child: const Icon(Icons.broken_image, color: Colors.grey),
+          ),
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            if (wasSynchronouslyLoaded) return child;
+            return frame == null
+                ? Container(
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : child;
+          },
+        );
+      } else {
+        imageWidget = Container(
+          color: Colors.grey[300],
+          child: const Icon(Icons.broken_image, color: Colors.grey),
+        );
+      }
     }
 
     return ClipRRect(
       borderRadius: BorderRadius.circular(NeumorphicThemeConfig.borderRadius),
       child: imageWidget,
+    );
+  }
+
+  Widget _buildAssetVideoGifPlaceholder(BuildContext context) {
+    return Container(
+      decoration: BoxDecoration(
+        gradient: LinearGradient(
+          begin: Alignment.topLeft,
+          end: Alignment.bottomRight,
+          colors: [
+            Theme.of(context).colorScheme.primary.withOpacity(0.6),
+            Theme.of(context).colorScheme.secondary.withOpacity(0.6),
+            Theme.of(context).colorScheme.tertiary.withOpacity(0.6),
+          ],
+        ),
+      ),
+      child: Center(
+        child: Icon(
+          mediaItem.type == MediaType.gif ? Icons.animation : Icons.play_circle_outline,
+          size: 48,
+          color: Colors.white.withOpacity(0.8),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImageErrorPlaceholder(BuildContext context) {
+    return Container(
+      color: Colors.grey[300],
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.broken_image,
+              size: 48,
+              color: Colors.grey[600],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Image not found',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 12,
+              ),
+            ),
+          ],
+        ),
+      ),
     );
   }
 
@@ -102,6 +208,42 @@ class MediaCard extends StatelessWidget {
                   fontWeight: FontWeight.w500,
                 ),
               ),
+          ],
+        ),
+      ),
+    );
+  }
+
+  Widget _buildGifIndicator(BuildContext context) {
+    return Positioned(
+      bottom: 8,
+      left: 8,
+      child: Container(
+        padding: const EdgeInsets.symmetric(
+          horizontal: 8,
+          vertical: 4,
+        ),
+        decoration: BoxDecoration(
+          color: Colors.black54,
+          borderRadius: BorderRadius.circular(8),
+        ),
+        child: const Row(
+          mainAxisSize: MainAxisSize.min,
+          children: [
+            Icon(
+              Icons.animation,
+              color: Colors.white,
+              size: 16,
+            ),
+            SizedBox(width: 4),
+            Text(
+              'GIF',
+              style: TextStyle(
+                color: Colors.white,
+                fontSize: 12,
+                fontWeight: FontWeight.w500,
+              ),
+            ),
           ],
         ),
       ),

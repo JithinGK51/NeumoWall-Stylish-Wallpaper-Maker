@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
+import '../widgets/ad_banner.dart';
 import '../providers/preferences_provider.dart';
 import '../models/user_preferences.dart';
 import '../themes/neumorphic_theme.dart';
@@ -22,9 +23,18 @@ class SettingsScreen extends ConsumerWidget {
           title: const Text('Settings'),
           centerTitle: true,
         ),
-        body: ListView(
-          padding: const EdgeInsets.all(NeumorphicThemeConfig.defaultPadding),
+        body: Column(
           children: [
+            // Ad Banner
+            Padding(
+              padding: const EdgeInsets.all(8.0),
+              child: AdBanner(screenName: 'Settings'),
+            ),
+            // Content
+            Expanded(
+              child: ListView(
+                padding: const EdgeInsets.all(NeumorphicThemeConfig.defaultPadding),
+                children: [
             _buildSectionHeader(context, 'Appearance'),
             _buildThemeModeTile(context, ref, preferences),
             _buildAnimationQualityTile(context, ref, preferences),
@@ -35,7 +45,10 @@ class SettingsScreen extends ConsumerWidget {
             _buildSectionHeader(context, 'About'),
             _buildOnboardingTile(context, ref),
             _buildAboutTile(context),
-            _buildVersionTile(context),
+                  _buildVersionTile(context),
+                ],
+              ),
+            ),
           ],
         ),
       ),

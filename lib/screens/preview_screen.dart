@@ -1,16 +1,22 @@
 import 'dart:io';
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import 'package:video_player/video_player.dart';
 import 'package:share_plus/share_plus.dart';
 import 'package:awesome_dialog/awesome_dialog.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:path_provider/path_provider.dart';
 import '../models/media_item.dart';
 import '../services/wallpaper_service.dart';
 import '../themes/neumorphic_theme.dart';
 import '../utils/constants.dart';
 import '../widgets/neumorphic_button.dart';
+import '../widgets/device_preview.dart';
+import '../providers/preferences_provider.dart';
+import '../providers/theme_provider.dart';
+import '../services/theme_service.dart';
 
 class PreviewScreen extends ConsumerStatefulWidget {
   final MediaItem mediaItem;
@@ -27,13 +33,15 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
   bool _isDimmed = false;
   bool _isVideoInitialized = false;
   String? _croppedImagePath;
+  bool _showDevicePreview = true; // Default to device preview
 
   @override
   void initState() {
     super.initState();
     _transformationController = TransformationController();
     
-    if (widget.mediaItem.isVideo) {
+    // Only initialize video for actual video files, not GIFs
+    if (widget.mediaItem.type == MediaType.video) {
       _initializeVideo();
     }
   }
@@ -42,10 +50,16 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     try {
       String videoPath = widget.mediaItem.source;
       
-      // Handle asset paths
+      // Handle asset paths - copy to temp file first
       if (videoPath.startsWith('assets/')) {
-        // Asset videos would need special handling
-        return;
+        final tempDir = await getTemporaryDirectory();
+        final fileName = videoPath.split('/').last;
+        final tempFile = File('${tempDir.path}/$fileName');
+        
+        // Copy asset to temp file
+        final byteData = await rootBundle.load(videoPath);
+        await tempFile.writeAsBytes(byteData.buffer.asUint8List());
+        videoPath = tempFile.path;
       }
 
       _videoController = VideoPlayerController.file(File(videoPath));
@@ -57,7 +71,11 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
         _isVideoInitialized = true;
       });
     } catch (e) {
-      // Handle error
+      if (mounted) {
+        ScaffoldMessenger.of(context).showSnackBar(
+          SnackBar(content: Text('Error loading video: $e')),
+        );
+      }
     }
   }
 
@@ -132,6 +150,11 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     final mediaItem = _croppedImagePath != null
         ? widget.mediaItem.copyWith(source: _croppedImagePath!)
         : widget.mediaItem;
+    
+    // Extract theme colors from wallpaper and apply
+    if (widget.mediaItem.isImage) {
+      _applyThemeFromWallpaper();
+    }
     
     final success = await wallpaperService.setWallpaper(mediaItem, type);
 
@@ -240,11 +263,18 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Media preview
+            // Media preview (device preview by default)
             Center(
-              child: widget.mediaItem.isImage
-                  ? _buildImagePreview()
-                  : _buildVideoPreview(),
+              child: _showDevicePreview
+                  ? DevicePreview(
+                      mediaItem: widget.mediaItem,
+                      videoController: _videoController,
+                      isVideoInitialized: _isVideoInitialized,
+                      croppedImagePath: _croppedImagePath,
+                    )
+                  : (widget.mediaItem.type == MediaType.video
+                      ? _buildVideoPreview()
+                      : _buildImagePreview()),
             ),
 
             // Top app bar
@@ -271,6 +301,19 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   actions: [
+                    // Device/Full preview toggle
+                    IconButton(
+                      icon: Icon(
+                        _showDevicePreview ? Icons.fullscreen : Icons.phone_android,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _showDevicePreview = !_showDevicePreview;
+                        });
+                      },
+                      tooltip: _showDevicePreview ? 'Full Preview' : 'Device Preview',
+                    ),
                     if (widget.mediaItem.isImage)
                       IconButton(
                         icon: const Icon(Icons.crop, color: Colors.white),
@@ -319,7 +362,7 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    if (widget.mediaItem.isVideo) _buildVideoControls(),
+                    if (widget.mediaItem.type == MediaType.video) _buildVideoControls(),
                     const SizedBox(height: 16),
                     NeumorphicButton(
                       label: 'Set Wallpaper',
@@ -343,6 +386,28 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     
     // Use cropped image if available
     final imageSource = _croppedImagePath ?? widget.mediaItem.source;
+
+    // For GIFs, try to load as asset or file
+    if (widget.mediaItem.type == MediaType.gif) {
+      return InteractiveViewer(
+        transformationController: _transformationController,
+        minScale: AppConstants.minZoomScale,
+        maxScale: AppConstants.maxZoomScale,
+        child: Center(
+          child: isAsset
+              ? Image.asset(
+                  imageSource,
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.error, color: Colors.white),
+                )
+              : Image.file(
+                  File(imageSource),
+                  fit: BoxFit.contain,
+                  errorBuilder: (context, error, stackTrace) => const Icon(Icons.error, color: Colors.white),
+                ),
+        ),
+      );
+    }
 
     return InteractiveViewer(
       transformationController: _transformationController,
@@ -434,6 +499,44 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     final minutes = duration.inMinutes;
     final seconds = duration.inSeconds % 60;
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  /// Extract and apply theme colors from wallpaper
+  Future<void> _applyThemeFromWallpaper() async {
+    // Extract theme colors based on category
+    final themeColors = ThemeService.extractThemeFromCategory(widget.mediaItem.category);
+    final primaryColor = themeColors['primary']!;
+    final secondaryColor = themeColors['secondary']!;
+    
+    // Update theme through provider (will trigger app rebuild)
+    ref.read(themeNotifierProvider.notifier).updateTheme(primaryColor, secondaryColor);
+    
+    // Show confirmation
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.palette, color: Colors.white),
+              const SizedBox(width: 8),
+              const Expanded(
+                child: Text(
+                  'Theme updated to match wallpaper!',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: primaryColor,
+          duration: const Duration(seconds: 2),
+          action: SnackBarAction(
+            label: 'OK',
+            textColor: Colors.white,
+            onPressed: () {},
+          ),
+        ),
+      );
+    }
   }
 }
 
