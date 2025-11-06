@@ -40,21 +40,38 @@ class CategoryDetailScreen extends ConsumerWidget {
               child: categoryMediaAsync.when(
                 data: (mediaItems) {
                   if (mediaItems.isEmpty) {
-                    return Center(
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        children: [
-                          Icon(
-                            Icons.image_not_supported_outlined,
-                            size: 64,
-                            color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                    return RefreshIndicator(
+                      onRefresh: () async {
+                        ref.invalidate(categoryMediaProvider(categoryId));
+                        await ref.read(categoryMediaProvider(categoryId).future);
+                      },
+                      child: SingleChildScrollView(
+                        physics: const AlwaysScrollableScrollPhysics(),
+                        child: SizedBox(
+                          height: MediaQuery.of(context).size.height * 0.6,
+                          child: Center(
+                            child: Column(
+                              mainAxisAlignment: MainAxisAlignment.center,
+                              children: [
+                                Icon(
+                                  Icons.image_not_supported_outlined,
+                                  size: 64,
+                                  color: Theme.of(context).colorScheme.primary.withOpacity(0.5),
+                                ),
+                                const SizedBox(height: 16),
+                                Text(
+                                  'Loading wallpapers...',
+                                  style: Theme.of(context).textTheme.bodyLarge,
+                                ),
+                                const SizedBox(height: 8),
+                                Text(
+                                  'Pull down to refresh',
+                                  style: Theme.of(context).textTheme.bodySmall,
+                                ),
+                              ],
+                            ),
                           ),
-                          const SizedBox(height: 16),
-                          Text(
-                            'No wallpapers in this category',
-                            style: Theme.of(context).textTheme.bodyLarge,
-                          ),
-                        ],
+                        ),
                       ),
                     );
                   }
@@ -65,17 +82,22 @@ class CategoryDetailScreen extends ConsumerWidget {
                       final spacing = AppConstants.gridSpacing;
                       final padding = NeumorphicThemeConfig.defaultPadding;
 
-                      return Padding(
-                        padding: EdgeInsets.all(padding),
-                        child: GridView.builder(
-                          gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
-                            crossAxisCount: crossAxisCount,
-                            childAspectRatio: AppConstants.gridChildAspectRatio,
-                            crossAxisSpacing: spacing,
-                            mainAxisSpacing: spacing,
-                          ),
-                          itemCount: mediaItems.length,
-                          itemBuilder: (context, index) {
+                      return RefreshIndicator(
+                        onRefresh: () async {
+                          ref.invalidate(categoryMediaProvider(categoryId));
+                          await ref.read(categoryMediaProvider(categoryId).future);
+                        },
+                        child: Padding(
+                          padding: EdgeInsets.all(padding),
+                          child: GridView.builder(
+                            gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
+                              crossAxisCount: crossAxisCount,
+                              childAspectRatio: AppConstants.gridChildAspectRatio,
+                              crossAxisSpacing: spacing,
+                              mainAxisSpacing: spacing,
+                            ),
+                            itemCount: mediaItems.length,
+                            itemBuilder: (context, index) {
                             final item = mediaItems[index];
                             final isFavorite = ref.watch(preferencesProvider).favoriteIds.contains(item.id);
 
@@ -97,6 +119,7 @@ class CategoryDetailScreen extends ConsumerWidget {
                               ),
                             );
                           },
+                        ),
                         ),
                       );
                     },

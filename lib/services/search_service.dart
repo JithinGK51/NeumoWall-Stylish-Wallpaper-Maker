@@ -15,10 +15,14 @@ class SearchService {
     final List<MediaItem> results = [];
 
     try {
-      // Search in featured media
+      // Use MediaService search which includes Pixel API
+      final pixelResults = await _mediaService.searchMedia(query);
+      results.addAll(pixelResults);
+
+      // Also search in featured media for built-in items
       final featuredMedia = await _mediaService.getFeaturedMedia();
       for (final item in featuredMedia) {
-        if (_matchesQuery(item, queryLower)) {
+        if (_matchesQuery(item, queryLower) && !results.any((r) => r.id == item.id)) {
           results.add(item);
         }
       }

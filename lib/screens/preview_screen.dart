@@ -13,6 +13,10 @@ import '../services/wallpaper_service.dart';
 import '../themes/neumorphic_theme.dart';
 import '../utils/constants.dart';
 import '../widgets/neumorphic_button.dart';
+import '../widgets/device_preview.dart';
+import '../providers/preferences_provider.dart';
+import '../providers/theme_provider.dart';
+import '../services/theme_service.dart';
 
 class PreviewScreen extends ConsumerStatefulWidget {
   final MediaItem mediaItem;
@@ -29,6 +33,7 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
   bool _isDimmed = false;
   bool _isVideoInitialized = false;
   String? _croppedImagePath;
+  bool _showDevicePreview = true; // Default to device preview
 
   @override
   void initState() {
@@ -146,6 +151,11 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
         ? widget.mediaItem.copyWith(source: _croppedImagePath!)
         : widget.mediaItem;
     
+    // Extract theme colors from wallpaper and apply
+    if (widget.mediaItem.isImage) {
+      _applyThemeFromWallpaper();
+    }
+    
     final success = await wallpaperService.setWallpaper(mediaItem, type);
 
     if (mounted) {
@@ -253,11 +263,18 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
       body: SafeArea(
         child: Stack(
           children: [
-            // Media preview
+            // Media preview (device preview by default)
             Center(
-              child: widget.mediaItem.type == MediaType.video
-                  ? _buildVideoPreview()
-                  : _buildImagePreview(), // Images and GIFs use image preview
+              child: _showDevicePreview
+                  ? DevicePreview(
+                      mediaItem: widget.mediaItem,
+                      videoController: _videoController,
+                      isVideoInitialized: _isVideoInitialized,
+                      croppedImagePath: _croppedImagePath,
+                    )
+                  : (widget.mediaItem.type == MediaType.video
+                      ? _buildVideoPreview()
+                      : _buildImagePreview()),
             ),
 
             // Top app bar
@@ -284,6 +301,19 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
                     onPressed: () => Navigator.of(context).pop(),
                   ),
                   actions: [
+                    // Device/Full preview toggle
+                    IconButton(
+                      icon: Icon(
+                        _showDevicePreview ? Icons.fullscreen : Icons.phone_android,
+                        color: Colors.white,
+                      ),
+                      onPressed: () {
+                        setState(() {
+                          _showDevicePreview = !_showDevicePreview;
+                        });
+                      },
+                      tooltip: _showDevicePreview ? 'Full Preview' : 'Device Preview',
+                    ),
                     if (widget.mediaItem.isImage)
                       IconButton(
                         icon: const Icon(Icons.crop, color: Colors.white),
@@ -469,6 +499,44 @@ class _PreviewScreenState extends ConsumerState<PreviewScreen> {
     final minutes = duration.inMinutes;
     final seconds = duration.inSeconds % 60;
     return '${minutes.toString().padLeft(2, '0')}:${seconds.toString().padLeft(2, '0')}';
+  }
+
+  /// Extract and apply theme colors from wallpaper
+  Future<void> _applyThemeFromWallpaper() async {
+    // Extract theme colors based on category
+    final themeColors = ThemeService.extractThemeFromCategory(widget.mediaItem.category);
+    final primaryColor = themeColors['primary']!;
+    final secondaryColor = themeColors['secondary']!;
+    
+    // Update theme through provider (will trigger app rebuild)
+    ref.read(themeNotifierProvider.notifier).updateTheme(primaryColor, secondaryColor);
+    
+    // Show confirmation
+    if (mounted) {
+      ScaffoldMessenger.of(context).showSnackBar(
+        SnackBar(
+          content: Row(
+            children: [
+              const Icon(Icons.palette, color: Colors.white),
+              const SizedBox(width: 8),
+              const Expanded(
+                child: Text(
+                  'Theme updated to match wallpaper!',
+                  style: TextStyle(color: Colors.white),
+                ),
+              ),
+            ],
+          ),
+          backgroundColor: primaryColor,
+          duration: const Duration(seconds: 2),
+          action: SnackBarAction(
+            label: 'OK',
+            textColor: Colors.white,
+            onPressed: () {},
+          ),
+        ),
+      );
+    }
   }
 }
 

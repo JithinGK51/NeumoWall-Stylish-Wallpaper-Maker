@@ -7,6 +7,8 @@ import 'models/user_preferences.dart';
 import 'screens/splash_screen.dart';
 import 'utils/constants.dart';
 import 'services/ad_service.dart';
+import 'services/theme_service.dart';
+import 'providers/theme_provider.dart';
 
 void main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -33,6 +35,7 @@ class NeumoWallApp extends ConsumerWidget {
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     final preferences = ref.watch(preferencesProvider);
+    final customThemeAsync = ref.watch(themeNotifierProvider);
     
     // Determine theme mode
     ThemeMode themeMode;
@@ -48,11 +51,22 @@ class NeumoWallApp extends ConsumerWidget {
         themeMode = ThemeMode.system;
     }
 
+    // Get custom theme colors if available
+    final customTheme = customThemeAsync.valueOrNull;
+    final primaryColor = customTheme?['primary'];
+    final secondaryColor = customTheme?['secondary'];
+
     return MaterialApp(
       title: AppConstants.appName,
       debugShowCheckedModeBanner: false,
-      theme: NeumorphicThemeConfig.lightTheme,
-      darkTheme: NeumorphicThemeConfig.darkTheme,
+      theme: NeumorphicThemeConfig.lightTheme(
+        primaryColor: primaryColor,
+        secondaryColor: secondaryColor,
+      ),
+      darkTheme: NeumorphicThemeConfig.darkTheme(
+        primaryColor: primaryColor,
+        secondaryColor: secondaryColor,
+      ),
       themeMode: themeMode,
       home: const SplashScreen(),
     );

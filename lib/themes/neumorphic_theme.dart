@@ -37,14 +37,17 @@ class NeumorphicThemeConfig {
   static const Color darkText = Color(0xFFEDF2F7);
   static const Color darkTextSecondary = Color(0xFFA0AEC0);
 
-  // Light theme
-  static ThemeData get lightTheme {
+  // Light theme with optional custom colors
+  static ThemeData lightTheme({Color? primaryColor, Color? secondaryColor}) {
+    final primary = primaryColor ?? lightAccent;
+    final secondary = secondaryColor ?? lightAccent;
+    
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.light,
       colorScheme: ColorScheme.light(
-        primary: lightAccent,
-        secondary: lightAccent,
+        primary: primary,
+        secondary: secondary,
         surface: lightSurface,
         error: const Color(0xFFE74C3C),
         onPrimary: Colors.white,
@@ -111,14 +114,17 @@ class NeumorphicThemeConfig {
     );
   }
 
-  // Dark theme
-  static ThemeData get darkTheme {
+  // Dark theme with optional custom colors
+  static ThemeData darkTheme({Color? primaryColor, Color? secondaryColor}) {
+    final primary = primaryColor ?? darkAccent;
+    final secondary = secondaryColor ?? darkAccent;
+    
     return ThemeData(
       useMaterial3: true,
       brightness: Brightness.dark,
       colorScheme: ColorScheme.dark(
-        primary: darkAccent,
-        secondary: darkAccent,
+        primary: primary,
+        secondary: secondary,
         surface: darkSurface,
         error: const Color(0xFFE74C3C),
         onPrimary: Colors.white,
@@ -200,8 +206,14 @@ class NeumorphicThemeConfig {
   }
 
   // Helper to get theme based on brightness
-  static ThemeData getTheme(Brightness brightness) {
-    return brightness == Brightness.dark ? darkTheme : lightTheme;
+  static ThemeData getTheme(Brightness brightness, {Color? primaryColor, Color? secondaryColor}) {
+    return brightness == Brightness.dark 
+        ? darkTheme(primaryColor: primaryColor, secondaryColor: secondaryColor)
+        : lightTheme(primaryColor: primaryColor, secondaryColor: secondaryColor);
   }
+
+  // Getter methods for backward compatibility
+  static ThemeData get lightThemeDefault => lightTheme();
+  static ThemeData get darkThemeDefault => darkTheme();
 }
 

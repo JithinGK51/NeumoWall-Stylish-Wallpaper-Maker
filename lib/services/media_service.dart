@@ -4,33 +4,58 @@ import '../models/media_item.dart';
 import '../utils/constants.dart';
 import 'permission_service.dart';
 import 'package:photo_manager/photo_manager.dart';
+import 'pixel_api_service.dart';
 
 class MediaService {
   final PermissionService _permissionService = PermissionService();
+  final PixelApiService _pixelApiService = PixelApiService();
   List<MediaItem>? _cachedBuiltInMedia;
   List<Category>? _cachedCategories;
+  List<MediaItem>? _cachedPixelMedia;
 
   Future<List<MediaItem>> getFeaturedMedia() async {
-    if (_cachedBuiltInMedia != null) {
-      return _cachedBuiltInMedia!;
+    // Combine built-in and Pixel API wallpapers
+    final List<MediaItem> allMedia = [];
+
+    // Get built-in media
+    try {
+      if (_cachedBuiltInMedia == null) {
+        try {
+          final manifestData =
+              await rootBundle.loadString(AppConstants.curatedContentManifest);
+          final json = jsonDecode(manifestData) as Map<String, dynamic>;
+          final List<dynamic> items = json['featured'] ?? [];
+          
+          _cachedBuiltInMedia = items
+              .map((item) => MediaItem.fromJson(item as Map<String, dynamic>))
+              .toList();
+        } catch (e) {
+          _cachedBuiltInMedia = [];
+        }
+      }
+      allMedia.addAll(_cachedBuiltInMedia ?? []);
+    } catch (e) {
+      // Continue with Pixel API if built-in fails
     }
 
+    // Get curated photos from Pixel API (always fetch fresh for featured)
+    // Fetch 40-50 wallpapers by getting multiple pages
     try {
-      final manifestData =
-          await rootBundle.loadString(AppConstants.curatedContentManifest);
-      final json = jsonDecode(manifestData) as Map<String, dynamic>;
-      final List<dynamic> items = json['featured'] ?? [];
-      
-      _cachedBuiltInMedia = items
-          .map((item) => MediaItem.fromJson(item as Map<String, dynamic>))
-          .toList();
-      
-      return _cachedBuiltInMedia ?? [];
+      final page1 = await _pixelApiService.getCuratedPhotos(perPage: 40, page: 1);
+      final page2 = await _pixelApiService.getCuratedPhotos(perPage: 10, page: 2);
+      _cachedPixelMedia = [...page1, ...page2];
+      allMedia.addAll(_cachedPixelMedia ?? []);
     } catch (e) {
-      // Return empty list if manifest doesn't exist or is invalid
-      // In production, this would load from a server or have default assets
-      return _getDefaultFeaturedMedia();
+      // If second page fails, use first page only
+      try {
+        _cachedPixelMedia = await _pixelApiService.getCuratedPhotos(perPage: 40, page: 1);
+        allMedia.addAll(_cachedPixelMedia ?? []);
+      } catch (e) {
+        // Continue with built-in if Pixel API fails
+      }
     }
+
+    return allMedia;
   }
 
   Future<List<Category>> getCategories() async {
@@ -55,30 +80,104 @@ class MediaService {
   }
 
   Future<List<MediaItem>> getMediaByCategory(String categoryId) async {
+    final List<MediaItem> allMedia = [];
+
+    // First try to load from category-specific file
     try {
-      // First try to load from category-specific file
       final categoryFileName = 'assets/data/$categoryId.json';
       try {
         final categoryData = await rootBundle.loadString(categoryFileName);
         final List<dynamic> items = jsonDecode(categoryData) as List<dynamic>;
-        return items
+        final builtInItems = items
             .map((item) => MediaItem.fromJson(item as Map<String, dynamic>))
             .toList();
+        allMedia.addAll(builtInItems);
       } catch (e) {
         // If category file doesn't exist, fall back to main manifest
-        final manifestData =
-            await rootBundle.loadString(AppConstants.curatedContentManifest);
-        final json = jsonDecode(manifestData) as Map<String, dynamic>;
-        final Map<String, dynamic> categoriesData = json['mediaByCategory'] ?? {};
-        final List<dynamic> items = categoriesData[categoryId] ?? [];
-        
-        return items
-            .map((item) => MediaItem.fromJson(item as Map<String, dynamic>))
-            .toList();
+        try {
+          final manifestData =
+              await rootBundle.loadString(AppConstants.curatedContentManifest);
+          final json = jsonDecode(manifestData) as Map<String, dynamic>;
+          final Map<String, dynamic> categoriesData = json['mediaByCategory'] ?? {};
+          final List<dynamic> items = categoriesData[categoryId] ?? [];
+          
+          final builtInItems = items
+              .map((item) => MediaItem.fromJson(item as Map<String, dynamic>))
+              .toList();
+          allMedia.addAll(builtInItems);
+        } catch (e) {
+          // Continue to Pixel API
+        }
       }
     } catch (e) {
-      return [];
+      // Continue to Pixel API
     }
+
+    // Always get wallpapers from Pixel API for this category
+    // This ensures we have content even if built-in media is empty
+    try {
+      final pixelMedia = await _pixelApiService.getPopularWallpapers(categoryId);
+      if (pixelMedia.isNotEmpty) {
+        allMedia.addAll(pixelMedia);
+      }
+    } catch (e) {
+      // If first attempt fails, try again with a simpler query
+      try {
+        final fallbackQuery = categoryId.toLowerCase().replaceAll('_', ' ');
+        final pixelMedia = await _pixelApiService.searchPhotos('$fallbackQuery wallpaper', perPage: 30);
+        if (pixelMedia.isNotEmpty) {
+          allMedia.addAll(pixelMedia);
+        }
+      } catch (e2) {
+        // Continue with built-in only if both fail
+      }
+    }
+    
+    // If still no media after all attempts, try one more time with category name
+    if (allMedia.isEmpty) {
+      try {
+        final categoryName = categoryId.toLowerCase().replaceAll('_', ' ');
+        final pixelMedia = await _pixelApiService.searchPhotos(categoryName, perPage: 30);
+        allMedia.addAll(pixelMedia);
+      } catch (e) {
+        // Return empty if everything fails
+      }
+    }
+
+    return allMedia;
+  }
+
+  /// Search media including Pixel API
+  Future<List<MediaItem>> searchMedia(String query) async {
+    final List<MediaItem> results = [];
+
+    // Search in built-in media
+    try {
+      if (_cachedBuiltInMedia == null) {
+        await getFeaturedMedia(); // This will populate cache
+      }
+      
+      final queryLower = query.toLowerCase();
+      for (final item in _cachedBuiltInMedia ?? []) {
+        if (item.title.toLowerCase().contains(queryLower) ||
+            (item.description?.toLowerCase().contains(queryLower) ?? false) ||
+            (item.category?.toLowerCase().contains(queryLower) ?? false)) {
+          results.add(item);
+        }
+      }
+    } catch (e) {
+      // Continue
+    }
+
+    // Search Pixel API
+    try {
+      final pixelResults = await _pixelApiService.searchPhotos(query, perPage: 20);
+      results.addAll(pixelResults);
+    } catch (e) {
+      // Continue with built-in results
+    }
+
+    return results;
   }
 
   Future<List<MediaItem>> getUserMedia() async {
@@ -131,22 +230,38 @@ class MediaService {
       }
 
       for (final asset in videoAssets) {
-        final file = await asset.file;
-        if (file != null) {
-          final fileInfo = file;
-          final durationSeconds = asset.duration;
-          if (durationSeconds != null && durationSeconds <= AppConstants.maxVideoDurationSeconds) {
-            mediaItems.add(MediaItem(
-              id: asset.id,
-              title: asset.title ?? 'Video',
-              type: MediaType.video,
-              source: fileInfo.path,
-              isBuiltIn: false,
-              createdAt: asset.createDateTime,
-              duration: Duration(seconds: durationSeconds),
-              fileSize: fileInfo.lengthSync(),
-            ));
+        try {
+          final file = await asset.file;
+          if (file != null && await file.exists()) {
+            final fileInfo = file;
+            final durationSeconds = asset.duration;
+            
+            // Include videos if:
+            // 1. Duration is null (unknown duration - include it)
+            // 2. Duration is <= 30 seconds (valid for wallpaper)
+            // Exclude only videos with duration > 30 seconds
+            final shouldInclude = durationSeconds == null || 
+                                   durationSeconds <= AppConstants.maxVideoDurationSeconds;
+            
+            if (shouldInclude) {
+              mediaItems.add(MediaItem(
+                id: asset.id,
+                title: asset.title ?? 'Video',
+                type: MediaType.video,
+                source: fileInfo.path,
+                isBuiltIn: false,
+                createdAt: asset.createDateTime,
+                duration: durationSeconds != null 
+                    ? Duration(seconds: durationSeconds) 
+                    : null,
+                fileSize: fileInfo.lengthSync(),
+              ));
+            }
           }
+        } catch (e) {
+          // Skip this video if there's an error accessing it
+          // Continue processing other videos
+          continue;
         }
       }
 
@@ -218,12 +333,24 @@ class MediaService {
 
   List<Category> _getDefaultCategories() {
     return [
-      Category(id: 'nature', name: 'Nature', itemCount: 0),
-      Category(id: 'abstract', name: 'Abstract', itemCount: 0),
-      Category(id: 'minimalist', name: 'Minimalist', itemCount: 0),
-      Category(id: 'dark', name: 'Dark', itemCount: 0),
-      Category(id: 'light', name: 'Light', itemCount: 0),
-      Category(id: 'gradient', name: 'Gradient', itemCount: 0),
+      Category(id: 'animals', name: 'Animals', itemCount: 0, description: 'Wildlife and nature'),
+      Category(id: 'cars', name: 'Cars', itemCount: 0, description: 'Luxury and sports cars'),
+      Category(id: 'bikes', name: 'Bikes', itemCount: 0, description: 'Motorcycles and bikes'),
+      Category(id: 'nature', name: 'Nature', itemCount: 0, description: 'Beautiful landscapes'),
+      Category(id: 'sea', name: 'Sea', itemCount: 0, description: 'Ocean and beach scenes'),
+      Category(id: 'ocean', name: 'Ocean', itemCount: 0, description: 'Underwater world'),
+      Category(id: 'fish', name: 'Fish', itemCount: 0, description: 'Marine life'),
+      Category(id: 'flowers', name: 'Flowers', itemCount: 0, description: 'Beautiful blooms'),
+      Category(id: 'anime', name: 'Anime', itemCount: 0, description: 'Anime characters'),
+      Category(id: 'games', name: 'Games', itemCount: 0, description: 'Gaming wallpapers'),
+      Category(id: 'knights', name: 'Knights', itemCount: 0, description: 'Epic 3D knight wallpapers'),
+      Category(id: 'ninja', name: 'Ninja', itemCount: 0, description: 'Warrior themes'),
+      Category(id: 'ants', name: 'Ants', itemCount: 0, description: 'Micro world'),
+      Category(id: 'buildings', name: 'Buildings', itemCount: 0, description: 'Architecture'),
+      Category(id: 'swords', name: 'Swords', itemCount: 0, description: 'Weapon collection'),
+      Category(id: 'guns', name: 'Guns', itemCount: 0, description: 'Firearms'),
+      Category(id: 'fighter_jets', name: 'Fighter Jets', itemCount: 0, description: 'Aircraft'),
+      Category(id: 'god', name: 'God', itemCount: 0, description: 'Divine themes'),
     ];
   }
 }
