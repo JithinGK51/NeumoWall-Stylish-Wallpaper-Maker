@@ -110,6 +110,9 @@ flutter:
 
   assets:
     - assets/images/
+    - assets/images/knights/
+    - assets/images/games/
+    - assets/images/god/
     - assets/videos/
     - assets/icons/
     - assets/data/
@@ -128,6 +131,9 @@ flutter:
     - assets/data/swords.json
     - assets/data/guns.json
     - assets/data/fighter_jets.json
+    - assets/data/knights.json
+    - assets/data/god.json
+    - assets/data/games.json
 
   # An image asset can refer to one or more resolution-specific "variants", see
   # https://flutter.dev/to/resolution-aware-images

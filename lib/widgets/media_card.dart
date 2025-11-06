@@ -1,4 +1,5 @@
 import 'dart:io';
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:cached_network_image/cached_network_image.dart';
 import '../models/media_item.dart';
@@ -63,14 +64,31 @@ class MediaCard extends StatelessWidget {
         imageWidget = Image.asset(
           mediaItem.source,
           fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => _buildAssetVideoGifPlaceholder(context),
+          errorBuilder: (context, error, stackTrace) {
+            debugPrint('Error loading asset GIF: ${mediaItem.source} - $error');
+            return _buildAssetVideoGifPlaceholder(context);
+          },
         );
       } else {
         // For asset images, use Image.asset
         imageWidget = Image.asset(
           mediaItem.source,
           fit: BoxFit.cover,
-          errorBuilder: (context, error, stackTrace) => _buildAssetVideoGifPlaceholder(context),
+          errorBuilder: (context, error, stackTrace) {
+            debugPrint('Error loading asset image: ${mediaItem.source} - $error');
+            return _buildImageErrorPlaceholder(context);
+          },
+          frameBuilder: (context, child, frame, wasSynchronouslyLoaded) {
+            if (wasSynchronouslyLoaded) return child;
+            return frame == null
+                ? Container(
+                    color: Colors.grey[300],
+                    child: const Center(
+                      child: CircularProgressIndicator(),
+                    ),
+                  )
+                : child;
+          },
         );
       }
     } else {
@@ -128,6 +146,32 @@ class MediaCard extends StatelessWidget {
           mediaItem.type == MediaType.gif ? Icons.animation : Icons.play_circle_outline,
           size: 48,
           color: Colors.white.withOpacity(0.8),
+        ),
+      ),
+    );
+  }
+
+  Widget _buildImageErrorPlaceholder(BuildContext context) {
+    return Container(
+      color: Colors.grey[300],
+      child: Center(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.center,
+          children: [
+            Icon(
+              Icons.broken_image,
+              size: 48,
+              color: Colors.grey[600],
+            ),
+            const SizedBox(height: 8),
+            Text(
+              'Image not found',
+              style: TextStyle(
+                color: Colors.grey[600],
+                fontSize: 12,
+              ),
+            ),
+          ],
         ),
       ),
     );

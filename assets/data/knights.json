@@ -1,0 +1,47 @@
+[
+  {
+    "id": "knight_1",
+    "title": "Knight Warrior",
+    "description": "Powerful knight warrior in armor",
+    "type": "image",
+    "source": "assets/images/knights/knight_warrior_01.jpg",
+    "category": "knights",
+    "isBuiltIn": true
+  },
+  {
+    "id": "knight_2",
+    "title": "Shield Bearer Knight",
+    "description": "Knight with shield ready for battle",
+    "type": "image",
+    "source": "assets/images/knights/knight_shield_bearer_01.jpg",
+    "category": "knights",
+    "isBuiltIn": true
+  },
+  {
+    "id": "knight_3",
+    "title": "Sword Master Knight",
+    "description": "Elite knight with master sword skills",
+    "type": "image",
+    "source": "assets/images/knights/knight_sword_master_01.jpg",
+    "category": "knights",
+    "isBuiltIn": true
+  },
+  {
+    "id": "knight_4",
+    "title": "Elite Armored Knight",
+    "description": "Powerful elite knight in full armor",
+    "type": "image",
+    "source": "assets/images/knights/knight_armor_elite_01.jpg",
+    "category": "knights",
+    "isBuiltIn": true
+  },
+  {
+    "id": "knight_5",
+    "title": "Battle Ready Knight",
+    "description": "Knight prepared for epic battle",
+    "type": "image",
+    "source": "assets/images/knights/knight_battle_ready_01.jpg",
+    "category": "knights",
+    "isBuiltIn": true
+  }
+]
